@@ -1,7 +1,6 @@
 package com.example.demo.web;
 
 import com.example.demo.dto.CarDTO;
-import com.example.demo.exceptions.ApiError;
 import com.example.demo.repositories.CarRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
@@ -12,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -121,5 +119,15 @@ public class CarTests {
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("errors", Matchers.contains("id should be of type java.util.Optional")));
+    }
+
+    @Test
+    public void whenInternalException_thenBadRequest() throws Exception {
+        String uri = "/car/{id}";
+        Integer idToDelete = 20;
+        mockMvc.perform(delete(uri, idToDelete).contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", Matchers.contains("There is no such car!")));
     }
 }

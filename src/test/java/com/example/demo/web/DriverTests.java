@@ -120,4 +120,14 @@ public class DriverTests {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("errors", Matchers.contains("id should be of type java.util.Optional")));
     }
+
+    @Test
+    public void whenInternalException_thenBadRequest() throws Exception {
+        String uri = "/driver/{id}";
+        Integer idToDelete = 20;
+        mockMvc.perform(delete(uri, idToDelete).contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", Matchers.contains("There is no such driver!")));
+    }
 }
