@@ -1,6 +1,11 @@
 package com.example.demo.web;
 
+import com.example.demo.dto.CarDTO;
+import com.example.demo.init.InitData;
+import com.example.demo.repositories.CarRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.checkerframework.checker.units.qual.A;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -35,6 +41,9 @@ public class CarTests {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    CarRepository repository;
+
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
 
@@ -46,12 +55,24 @@ public class CarTests {
         this.mockMvc = builder.build();
     }
 
-    // FIXME: 28.07.2021 add more expectations in result ala->  .andExpect(jsonPath("name", equalTo("Masha")))
-
+    @Test
+    public void testCreate() throws Exception {
+        String uri = "/car";
+        CarDTO dto = new CarDTO();
+        dto.setModelName("2104");
+        dto.setCarName("VAZ");
+        dto.setDescription("Четырка");
+        dto.setDriverId(1);
+        String content = objectMapper.writeValueAsString(dto);
+        mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("modelName").value("2104"));
+    }
     @Test
     public void testGetById() throws Exception {
         String uri = "/car/{id}";
-        mockMvc.perform(get(uri, "1").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(uri, 1).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
     }
@@ -65,42 +86,29 @@ public class CarTests {
     }
 
     @Test
-    public void testCreate() throws Exception {
-        String uri = "/car";
-        // FIXME: 28.07.2021 create DTO and use Jackson -> writevalueAsString
-        String content = "{\n" +
-                "  \"modelName\": \"2104\",\n" +
-                "  \"carName\": \"VAZ\",\n" +
-                "  \"description\": \"Четырка\",\n" +
-                "  \"driverId\": 2\n" +
-                "}";
-        mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
-                .andDo(document(uri.replace("/", "\\")))
-                .andExpect(status().isOk());
-    }
-
-    @Test
     public void testUpdate() throws Exception {
         String uri = "/car";
-        // FIXME: 28.07.2021 create DTO and use Jackson -> writevalueAsString
-        String content = "{\n" +
-                "  \"id\": 5,\n" +
-                "  \"modelName\": \"2106\",\n" +
-                "  \"carName\": \"VAZ\",\n" +
-                "  \"description\": \"Шестерка\",\n" +
-                "  \"driverId\": 2\n" +
-                "}";
+        CarDTO dto = new CarDTO();
+        dto.setId(1);
+        dto.setModelName("2106");
+        dto.setCarName("VAZ");
+        dto.setDescription("Шестерка");
+        dto.setDriverId(2);
+        String content = objectMapper.writeValueAsString(dto);
         mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(document(uri.replace("/", "\\")))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("modelName").value("2106"));
     }
 
     @Test
     public void testDelete() throws Exception {
         String uri = "/car/{id}";
-        // TODO: 28.07.2021 check in Repo if deleted, inject in test class
-        mockMvc.perform(delete(uri, 5).contentType(MediaType.APPLICATION_JSON))
+        Integer idToDelete = 2;
+        Assert.assertTrue("There was not such entity to remove!", repository.existsById(idToDelete));
+        mockMvc.perform(delete(uri, idToDelete).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
+        Assert.assertFalse("The entity was not removed!", repository.existsById(idToDelete));
     }
 }

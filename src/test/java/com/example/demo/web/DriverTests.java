@@ -1,6 +1,11 @@
 package com.example.demo.web;
 
+import com.example.demo.dto.DriverDTO;
+import com.example.demo.init.InitData;
+import com.example.demo.repositories.DriverRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,10 +27,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@Slf4j
 public class DriverTests {
     MockMvc mockMvc;
 
@@ -34,6 +41,9 @@ public class DriverTests {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    DriverRepository repository;
 
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
@@ -47,9 +57,23 @@ public class DriverTests {
     }
 
     @Test
+    public void testCreate() throws Exception {
+        String uri = "/driver";
+        DriverDTO dto = new DriverDTO();
+        dto.setFirstName("Dmitry");
+        dto.setLastName("Medvedev");
+        dto.setAge(54);
+        String content = objectMapper.writeValueAsString(dto);
+        mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("firstName").value("Dmitry"));
+    }
+
+    @Test
     public void testGetById() throws Exception {
         String uri = "/driver/{id}";
-        mockMvc.perform(get(uri, "1").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(uri, 1).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
     }
@@ -63,37 +87,28 @@ public class DriverTests {
     }
 
     @Test
-    public void testCreate() throws Exception {
-        String uri = "/driver";
-        String content = "{\n" +
-                "  \"firstName\": \"Dmitry\",\n" +
-                "  \"lastName\": \"Medvedev\",\n" +
-                "  \"age\": 54\n" +
-                "}";
-        mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
-                .andDo(document(uri.replace("/", "\\")))
-                .andExpect(status().isOk());
-    }
-
-    @Test
     public void testUpdate() throws Exception {
         String uri = "/driver";
-        String content = "{\n" +
-                "  \"id\": 5,\n" +
-                "  \"firstName\": \"Vladimir\",\n" +
-                "  \"lastName\": \"Putin\",\n" +
-                "  \"age\": 54\n" +
-                "}";
+        DriverDTO dto = new DriverDTO();
+        dto.setId(1);
+        dto.setFirstName("Vladimir");
+        dto.setLastName("Putin");
+        dto.setAge(54);
+        String content = objectMapper.writeValueAsString(dto);
         mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(document(uri.replace("/", "\\")))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("firstName").value("Vladimir"));
     }
 
     @Test
     public void testDelete() throws Exception {
         String uri = "/driver/{id}";
-        mockMvc.perform(delete(uri, 5).contentType(MediaType.APPLICATION_JSON))
+        Integer idToDelete = 2;
+        Assert.assertTrue("There was not such entity to remove!", repository.existsById(idToDelete));
+        mockMvc.perform(delete(uri, idToDelete).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
+        Assert.assertFalse("The entity was not removed!", repository.existsById(idToDelete));
     }
 }

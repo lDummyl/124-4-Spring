@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -27,20 +28,22 @@ public class CarController {
     private final CarService service;
 
     @GetMapping(value = {"", "/{id}"})
-    public List<Car> getById(@PathVariable(name = "id")/* FIXME: 28.07.2021 redundant*/ Optional<Integer> id) {
+    public List<CarDTO> getById(@PathVariable Optional<Integer> id) {
         return id
-                .map(integer -> Collections.singletonList(service.getById(integer)))
-                .orElseGet(service::getAll);
+                .map(integer -> Collections.singletonList(service.toDTO(service.getById(integer))))
+                .orElseGet(() -> service.getAll().stream()
+                        .map(service::toDTO)
+                        .collect(Collectors.toList()));
     }
 
-    @PostMapping("")// FIXME: 28.07.2021 redundant
-    public Car/*fixme return DTO here and everywhere, use ObjectMapper inject it to service*/ create(@RequestBody CarDTO dto) {
-        return service.create(dto.getModelName(), dto.getCarName(), dto.getDescription(), dto.getDriverId());
+    @PostMapping
+    public CarDTO create(@RequestBody CarDTO dto) {
+        return service.toDTO(service.create(dto));
     }
 
-    @PutMapping("")
-    public Car update(@RequestBody CarDTO dto) {
-        return service.updateById(dto.getId(), dto.getModelName(), dto.getCarName(), dto.getDescription(), dto.getDriverId());
+    @PutMapping
+    public CarDTO update(@RequestBody CarDTO dto) {
+        return service.toDTO(service.updateById(dto));
     }
 
     @DeleteMapping("/{id}")

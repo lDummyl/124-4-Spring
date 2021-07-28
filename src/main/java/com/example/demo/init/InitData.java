@@ -17,7 +17,7 @@ public class InitData {
     private final DriverService driverService;
 
     @PostConstruct
-    private void init() {
+    public void init() {
         driverService.create("Sergey", "Zhak", 34);
         driverService.create("Ivan", "Ivanov", 18);
         driverService.create("Petr", "Petrov", 50);

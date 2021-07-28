@@ -1,5 +1,6 @@
 package com.example.demo.web;
 
+import com.example.demo.dto.CarDTO;
 import com.example.demo.dto.DriverDTO;
 import com.example.demo.entities.Driver;
 import com.example.demo.services.DriverService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -26,22 +28,23 @@ public class DriverController {
 
     private final DriverService service;
 
-    // FIXME: 28.07.2021 same as in CarController
     @GetMapping(value = {"", "/{id}"})
-    public List<Driver> getById(@PathVariable(name = "id") Optional<Integer> id) {
+    public List<DriverDTO> getById(@PathVariable Optional<Integer> id) {
         return id
-                .map(integer -> Collections.singletonList(service.getById(integer)))
-                .orElseGet(service::getAll);
+                .map(integer -> Collections.singletonList(service.toDTO(service.getById(integer))))
+                .orElseGet(() -> service.getAll().stream()
+                        .map(service::toDTO)
+                        .collect(Collectors.toList()));
     }
 
-    @PostMapping("")
-    public Driver create(@RequestBody DriverDTO dto) {
-        return service.create(dto.getFirstName(), dto.getLastName(), dto.getAge());
+    @PostMapping
+    public DriverDTO create(@RequestBody DriverDTO dto) {
+        return service.toDTO(service.create(dto));
     }
 
-    @PutMapping("")
-    public Driver update(@RequestBody DriverDTO dto) {
-        return service.updateById(dto.getId(), dto.getFirstName(), dto.getLastName(), dto.getAge());
+    @PutMapping
+    public DriverDTO update(@RequestBody DriverDTO dto) {
+        return service.toDTO(service.updateById(dto));
     }
 
     @DeleteMapping("/{id}")
