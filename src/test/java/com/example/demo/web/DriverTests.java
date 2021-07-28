@@ -4,6 +4,7 @@ import com.example.demo.dto.DriverDTO;
 import com.example.demo.repositories.DriverRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -109,5 +110,14 @@ public class DriverTests {
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
         Assert.assertFalse("The entity was not removed!", repository.existsById(idToDelete));
+    }
+
+    @Test
+    public void whenMethodArgumentMismatch_thenBadRequest() throws Exception {
+        String uri = "/driver/{id}";
+        mockMvc.perform(get(uri, "blah-de-blah").contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", Matchers.contains("id should be of type java.util.Optional")));
     }
 }

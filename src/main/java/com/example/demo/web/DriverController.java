@@ -24,9 +24,6 @@ public class DriverController {
 
     private final DriverWebService service;
 
-    // FIXME: 28.07.2021 add exception handler to process errors to HTTP
-    //  responses properly https://www.baeldung.com/global-error-handler-in-a-spring-rest-api
-
     @GetMapping(value = {"", "/{id}"})
     public List<DriverDTO> getById(@PathVariable Optional<Integer> id) {
         return service.getById(id);
