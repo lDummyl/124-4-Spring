@@ -39,7 +39,7 @@ public class DriverService {
 
     // FIXME: 28.07.2021 transaction
     public Driver updateById(Integer id, String firstName, String lastName, Integer age) {
-        // FIXME: 28.07.2021  
+        // FIXME: 28.07.2021
         Driver driver = repository.findById(id).orElse(new Driver());
         driver.setFirstName(firstName);
         driver.setLastName(lastName);
