@@ -22,6 +22,9 @@ public class CarService {
     private final CarRepository repository;
     private final DriverRepository driverRepository;
 
+    private static final String NO_CAR_MESSAGE = "There is no such car!";
+    private static final String DTO_MUST_NOT_BE_NULL_MESSAGE = "DTO must not be null!";
+
     @Transactional
     public Car create(String modelName, String carName, String description, Integer driverId) {
         Car car = new Car();
@@ -35,6 +38,9 @@ public class CarService {
 
     @Transactional
     public void deleteById(Integer id) {
+        if (!repository.existsById(id)) {
+            throw new CarDriverApiException(NO_CAR_MESSAGE);
+        }
         repository.deleteById(id);
     }
 
@@ -43,7 +49,7 @@ public class CarService {
         if (car.isPresent()) {
             return car.get();
         } else {
-            throw new CarDriverApiException("There is no such car!");
+            throw new CarDriverApiException(NO_CAR_MESSAGE);
         }
     }
 
@@ -53,7 +59,7 @@ public class CarService {
 
     @Transactional
     public Car update(Integer id, String modelName, String carName, String description, Integer driverId) {
-        Car car = repository.findById(id).orElseThrow(() -> new CarDriverApiException("There is no such car!"));
+        Car car = repository.findById(id).orElseThrow(() -> new CarDriverApiException(NO_CAR_MESSAGE));
         car.setModelName(modelName);
         car.setCarName(carName);
         car.setDescription(description);
@@ -64,7 +70,7 @@ public class CarService {
 
     public CarDTO toDTO(Car car) {
         if (car == null) {
-            throw new CarDriverApiException("Car should not be null!");
+            throw new CarDriverApiException(DTO_MUST_NOT_BE_NULL_MESSAGE);
         }
         CarDTO dto = new CarDTO();
         dto.setCarName(car.getCarName());

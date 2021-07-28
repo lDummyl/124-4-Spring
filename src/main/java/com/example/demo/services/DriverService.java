@@ -19,6 +19,9 @@ public class DriverService {
 
     private final DriverRepository repository;
 
+    private static final String NO_DRIVER_MESSAGE = "There is no such driver!";
+    private static final String DTO_MUST_NOT_BE_NULL_MESSAGE = "DTO must not be null!";
+
     @Transactional
     public Driver create(String firstName, String lastName, Integer age) {
         Driver driver = new Driver();
@@ -33,7 +36,7 @@ public class DriverService {
         if (driver.isPresent()) {
             return driver.get();
         } else {
-            throw new CarDriverApiException("There is no such driver!");
+            throw new CarDriverApiException(NO_DRIVER_MESSAGE);
         }
     }
 
@@ -43,12 +46,15 @@ public class DriverService {
 
     @Transactional
     public void deleteById(Integer id) {
+        if (!repository.existsById(id)) {
+            throw new CarDriverApiException(NO_DRIVER_MESSAGE);
+        }
         repository.deleteById(id);
     }
 
     @Transactional
     public Driver update(Integer id, String firstName, String lastName, Integer age) {
-        Driver driver = repository.findById(id).orElseThrow(() -> new CarDriverApiException("There is no such driver!"));
+        Driver driver = repository.findById(id).orElseThrow(() -> new CarDriverApiException(NO_DRIVER_MESSAGE));
         driver.setFirstName(firstName);
         driver.setLastName(lastName);
         driver.setAge(age);
@@ -57,7 +63,7 @@ public class DriverService {
 
     public DriverDTO toDTO(Driver driver) {
         if (driver == null) {
-            throw new CarDriverApiException("Driver should not be null!");
+            throw new CarDriverApiException(DTO_MUST_NOT_BE_NULL_MESSAGE);
         }
         DriverDTO dto = new DriverDTO();
         dto.setFirstName(driver.getFirstName());
