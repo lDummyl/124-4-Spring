@@ -26,8 +26,12 @@ public class DriverController {
 
     private final DriverService service;
 
+    // FIXME: 28.07.2021 add exception handler to process errors to HTTP
+    //  responses properly https://www.baeldung.com/global-error-handler-in-a-spring-rest-api
+
     @GetMapping(value = {"", "/{id}"})
     public List<DriverDTO> getById(@PathVariable Optional<Integer> id) {
+        // FIXME: 28.07.2021 remove logic completely from controller, only proxy functional
         return id
                 .map(integer -> Collections.singletonList(service.toDTO(service.getById(integer))))
                 .orElseGet(() -> service.getAll().stream()
