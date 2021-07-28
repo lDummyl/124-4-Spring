@@ -1,10 +1,8 @@
 package com.example.demo.web;
 
 import com.example.demo.dto.CarDTO;
-import com.example.demo.init.InitData;
 import com.example.demo.repositories.CarRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;

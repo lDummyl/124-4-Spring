@@ -1,8 +1,6 @@
 package com.example.demo.web;
 
-import com.example.demo.dto.CarDTO;
 import com.example.demo.dto.DriverDTO;
-import com.example.demo.entities.Driver;
 import com.example.demo.services.DriverService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

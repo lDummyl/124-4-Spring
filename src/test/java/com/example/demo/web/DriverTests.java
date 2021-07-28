@@ -1,7 +1,6 @@
 package com.example.demo.web;
 
 import com.example.demo.dto.DriverDTO;
-import com.example.demo.init.InitData;
 import com.example.demo.repositories.DriverRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

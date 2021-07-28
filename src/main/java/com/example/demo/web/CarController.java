@@ -1,7 +1,6 @@
 package com.example.demo.web;
 
 import com.example.demo.dto.CarDTO;
-import com.example.demo.entities.Car;
 import com.example.demo.services.CarService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
