@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -25,8 +24,7 @@ public class DriverService {
     }
 
     public Driver getById(Integer id) {
-        Optional<Driver> driver = repository.findById(id);
-        return driver.orElse(null);
+        return repository.findById(id).orElse(null);
     }
 
     public List<Driver> getAll() {

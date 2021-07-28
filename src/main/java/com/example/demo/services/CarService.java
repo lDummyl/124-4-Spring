@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -34,8 +33,7 @@ public class CarService {
     }
 
     public Car getById(Integer id) {
-        Optional<Car> car = repository.findById(id);
-        return car.orElse(null);
+        return repository.findById(id).orElse(null);
     }
 
     public List<Car> getAll() {
