@@ -27,14 +27,14 @@ public class CarController {
     private final CarService service;
 
     @GetMapping(value = {"", "/{id}"})
-    public List<Car> getById(@PathVariable(name = "id") Optional<Integer> id) {
+    public List<Car> getById(@PathVariable(name = "id")/* FIXME: 28.07.2021 redundant*/ Optional<Integer> id) {
         return id
                 .map(integer -> Collections.singletonList(service.getById(integer)))
                 .orElseGet(service::getAll);
     }
 
-    @PostMapping("")
-    public Car create(@RequestBody CarDTO dto) {
+    @PostMapping("")// FIXME: 28.07.2021 redundant
+    public Car/*fixme return DTO here and everywhere, use ObjectMapper inject it to service*/ create(@RequestBody CarDTO dto) {
         return service.create(dto.getModelName(), dto.getCarName(), dto.getDescription(), dto.getDriverId());
     }
 

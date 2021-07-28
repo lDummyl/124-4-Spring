@@ -26,7 +26,7 @@ public class DriverService {
 
     public Driver getById(Integer id) {
         Optional<Driver> driver = repository.findById(id);
-        return driver.orElse(null);
+        return driver.orElse(null); // FIXME: 28.07.2021 abuse of optional, throw custom ex
     }
 
     public List<Driver> getAll() {
@@ -37,7 +37,9 @@ public class DriverService {
         repository.deleteById(id);
     }
 
+    // FIXME: 28.07.2021 transaction
     public Driver updateById(Integer id, String firstName, String lastName, Integer age) {
+        // FIXME: 28.07.2021  
         Driver driver = repository.findById(id).orElse(new Driver());
         driver.setFirstName(firstName);
         driver.setLastName(lastName);

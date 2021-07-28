@@ -26,6 +26,7 @@ public class DriverController {
 
     private final DriverService service;
 
+    // FIXME: 28.07.2021 same as in CarController
     @GetMapping(value = {"", "/{id}"})
     public List<Driver> getById(@PathVariable(name = "id") Optional<Integer> id) {
         return id

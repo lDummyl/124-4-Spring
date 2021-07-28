@@ -46,6 +46,8 @@ public class CarTests {
         this.mockMvc = builder.build();
     }
 
+    // FIXME: 28.07.2021 add more expectations in result ala->  .andExpect(jsonPath("name", equalTo("Masha")))
+
     @Test
     public void testGetById() throws Exception {
         String uri = "/car/{id}";
@@ -65,6 +67,7 @@ public class CarTests {
     @Test
     public void testCreate() throws Exception {
         String uri = "/car";
+        // FIXME: 28.07.2021 create DTO and use Jackson -> writevalueAsString
         String content = "{\n" +
                 "  \"modelName\": \"2104\",\n" +
                 "  \"carName\": \"VAZ\",\n" +
@@ -79,6 +82,7 @@ public class CarTests {
     @Test
     public void testUpdate() throws Exception {
         String uri = "/car";
+        // FIXME: 28.07.2021 create DTO and use Jackson -> writevalueAsString
         String content = "{\n" +
                 "  \"id\": 5,\n" +
                 "  \"modelName\": \"2106\",\n" +
@@ -94,6 +98,7 @@ public class CarTests {
     @Test
     public void testDelete() throws Exception {
         String uri = "/car/{id}";
+        // TODO: 28.07.2021 check in Repo if deleted, inject in test class
         mockMvc.perform(delete(uri, 5).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
