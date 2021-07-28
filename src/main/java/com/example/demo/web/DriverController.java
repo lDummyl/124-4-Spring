@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,24 +26,24 @@ public class DriverController {
 
     private final DriverService service;
 
-    @GetMapping(value = {"/get", "/get/{id}"})
+    @GetMapping(value = {"", "/{id}"})
     public List<Driver> getById(@PathVariable(name = "id") Optional<Integer> id) {
         return id
                 .map(integer -> Collections.singletonList(service.getById(integer)))
                 .orElseGet(service::getAll);
     }
 
-    @PostMapping("/create")
+    @PostMapping("")
     public Driver create(@RequestBody DriverDTO dto) {
         return service.create(dto.getFirstName(), dto.getLastName(), dto.getAge());
     }
 
-    @PostMapping("/update")
+    @PutMapping("")
     public Driver update(@RequestBody DriverDTO dto) {
         return service.updateById(dto.getId(), dto.getFirstName(), dto.getLastName(), dto.getAge());
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
         service.deleteById(id);
     }

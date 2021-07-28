@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,24 +26,24 @@ public class CarController {
 
     private final CarService service;
 
-    @GetMapping(value = {"/get", "/get/{id}"})
+    @GetMapping(value = {"", "/{id}"})
     public List<Car> getById(@PathVariable(name = "id") Optional<Integer> id) {
         return id
                 .map(integer -> Collections.singletonList(service.getById(integer)))
                 .orElseGet(service::getAll);
     }
 
-    @PostMapping("/create")
+    @PostMapping("")
     public Car create(@RequestBody CarDTO dto) {
         return service.create(dto.getModelName(), dto.getCarName(), dto.getDescription(), dto.getDriverId());
     }
 
-    @PostMapping("/update")
+    @PutMapping("")
     public Car update(@RequestBody CarDTO dto) {
         return service.updateById(dto.getId(), dto.getModelName(), dto.getCarName(), dto.getDescription(), dto.getDriverId());
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
         service.deleteById(id);
     }

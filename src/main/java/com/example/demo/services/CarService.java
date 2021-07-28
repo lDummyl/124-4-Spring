@@ -47,7 +47,7 @@ public class CarService {
         car.setModelName(modelName);
         car.setCarName(carName);
         car.setDescription(description);
-        Driver driver = driverRepository.getById(driverId);
+        Driver driver = driverRepository.findById(driverId).orElse(null);
         car.setDriver(driver);
         return repository.save(car);
     }

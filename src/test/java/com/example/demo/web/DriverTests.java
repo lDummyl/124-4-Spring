@@ -21,6 +21,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -47,7 +48,7 @@ public class DriverTests {
 
     @Test
     public void testGetById() throws Exception {
-        String uri = "/driver/get/{id}";
+        String uri = "/driver/{id}";
         mockMvc.perform(get(uri, "1").contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
@@ -55,7 +56,7 @@ public class DriverTests {
 
     @Test
     public void testGetAll() throws Exception {
-        String uri = "/driver/get";
+        String uri = "/driver";
         mockMvc.perform(get(uri).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
@@ -63,7 +64,7 @@ public class DriverTests {
 
     @Test
     public void testCreate() throws Exception {
-        String uri = "/driver/create";
+        String uri = "/driver";
         String content = "{\n" +
                 "  \"firstName\": \"Dmitry\",\n" +
                 "  \"lastName\": \"Medvedev\",\n" +
@@ -76,21 +77,21 @@ public class DriverTests {
 
     @Test
     public void testUpdate() throws Exception {
-        String uri = "/driver/create";
+        String uri = "/driver";
         String content = "{\n" +
                 "  \"id\": 5,\n" +
                 "  \"firstName\": \"Vladimir\",\n" +
                 "  \"lastName\": \"Putin\",\n" +
                 "  \"age\": 54\n" +
                 "}";
-        mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+        mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void testDelete() throws Exception {
-        String uri = "/driver/delete/{id}";
+        String uri = "/driver/{id}";
         mockMvc.perform(delete(uri, 5).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());

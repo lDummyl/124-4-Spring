@@ -18,7 +18,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -45,7 +48,7 @@ public class CarTests {
 
     @Test
     public void testGetById() throws Exception {
-        String uri = "/car/get/{id}";
+        String uri = "/car/{id}";
         mockMvc.perform(get(uri, "1").contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
@@ -53,7 +56,7 @@ public class CarTests {
 
     @Test
     public void testGetAll() throws Exception {
-        String uri = "/car/get";
+        String uri = "/car";
         mockMvc.perform(get(uri).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
@@ -61,7 +64,7 @@ public class CarTests {
 
     @Test
     public void testCreate() throws Exception {
-        String uri = "/car/create";
+        String uri = "/car";
         String content = "{\n" +
                 "  \"modelName\": \"2104\",\n" +
                 "  \"carName\": \"VAZ\",\n" +
@@ -75,21 +78,22 @@ public class CarTests {
 
     @Test
     public void testUpdate() throws Exception {
-        String uri = "/car/create";
+        String uri = "/car";
         String content = "{\n" +
+                "  \"id\": 5,\n" +
                 "  \"modelName\": \"2106\",\n" +
                 "  \"carName\": \"VAZ\",\n" +
                 "  \"description\": \"Шестерка\",\n" +
                 "  \"driverId\": 2\n" +
                 "}";
-        mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+        mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void testDelete() throws Exception {
-        String uri = "/car/delete/{id}";
+        String uri = "/car/{id}";
         mockMvc.perform(delete(uri, 5).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
