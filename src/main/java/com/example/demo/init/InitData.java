@@ -18,14 +18,14 @@ public class InitData {
 
     @PostConstruct
     private void init() {
-        driverService.create("Sergey", "Zhak", 34L);
-        driverService.create("Ivan", "Ivanov", 18L);
-        driverService.create("Petr", "Petrov", 50L);
-        driverService.create("Sidor", "Sidorov", 65L);
+        driverService.create("Sergey", "Zhak", 34);
+        driverService.create("Ivan", "Ivanov", 18);
+        driverService.create("Petr", "Petrov", 50);
+        driverService.create("Sidor", "Sidorov", 65);
 
-        carService.create("E200", "Mersedes", "Cool modern car", 1L);
-        carService.create("Forrester", "Subaru", "Not so cool car", 1L);
-        carService.create("2101", "VAZ", "Kopeika", 3L);
-        carService.create("BELAZ", "BELAZ", "Samosval", 4L);
+        carService.create("E200", "Mersedes", "Cool modern car", 1);
+        carService.create("Forrester", "Subaru", "Not so cool car", 1);
+        carService.create("2101", "VAZ", "Kopeika", 3);
+        carService.create("BELAZ", "BELAZ", "Samosval", 4);
     }
 }

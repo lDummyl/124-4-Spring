@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class CarDTO {
-    private Long id;
+    private Integer id;
     private String modelName;
     private String carName;
     private String description;
-    private Long driverId;
+    private Integer driverId;
 }

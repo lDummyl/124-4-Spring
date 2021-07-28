@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -23,14 +25,11 @@ public class DriverController {
 
     private final DriverService service;
 
-    @GetMapping("/get/{id}")
-    public Driver getById(@PathVariable Long id) {
-        return service.getById(id);
-    }
-
-    @GetMapping("/all")
-    public List<Driver> getAll() {
-        return service.getAll();
+    @GetMapping(value = {"/get", "/get/{id}"})
+    public List<Driver> getById(@PathVariable(name = "id") Optional<Integer> id) {
+        return id
+                .map(integer -> Collections.singletonList(service.getById(integer)))
+                .orElseGet(service::getAll);
     }
 
     @PostMapping("/create")
@@ -44,7 +43,7 @@ public class DriverController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Integer id) {
         service.deleteById(id);
     }
 }

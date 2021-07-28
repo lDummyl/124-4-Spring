@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class DriverDTO {
-    private Long id;
+    private Integer id;
     private String firstName;
     private String lastName;
-    private Long age;
+    private Integer age;
 }
