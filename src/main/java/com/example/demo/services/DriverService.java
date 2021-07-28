@@ -20,11 +20,6 @@ public class DriverService {
     private final DriverRepository repository;
 
     @Transactional
-    public Driver create(DriverDTO dto) {
-        return create(dto.getFirstName(), dto.getLastName(), dto.getAge());
-    }
-
-    @Transactional
     public Driver create(String firstName, String lastName, Integer age) {
         Driver driver = new Driver();
         driver.setFirstName(firstName);
@@ -52,12 +47,7 @@ public class DriverService {
     }
 
     @Transactional
-    public Driver updateById(DriverDTO dto) {
-        return updateById(dto.getId(), dto.getFirstName(), dto.getLastName(), dto.getAge());
-    }
-
-    @Transactional
-    public Driver updateById(Integer id, String firstName, String lastName, Integer age) {
+    public Driver update(Integer id, String firstName, String lastName, Integer age) {
         Driver driver = repository.findById(id).orElseThrow(() -> new CarDriverApiException("There is no such driver!"));
         driver.setFirstName(firstName);
         driver.setLastName(lastName);

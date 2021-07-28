@@ -23,11 +23,6 @@ public class CarService {
     private final DriverRepository driverRepository;
 
     @Transactional
-    public Car create(CarDTO dto) {
-        return create(dto.getModelName(), dto.getCarName(), dto.getDescription(), dto.getDriverId());
-    }
-
-    @Transactional
     public Car create(String modelName, String carName, String description, Integer driverId) {
         Car car = new Car();
         car.setModelName(modelName);
@@ -57,12 +52,7 @@ public class CarService {
     }
 
     @Transactional
-    public Car updateById(CarDTO dto) {
-        return updateById(dto.getId(), dto.getModelName(), dto.getCarName(), dto.getDescription(), dto.getDriverId());
-    }
-
-    @Transactional
-    public Car updateById(Integer id, String modelName, String carName, String description, Integer driverId) {
+    public Car update(Integer id, String modelName, String carName, String description, Integer driverId) {
         Car car = repository.findById(id).orElseThrow(() -> new CarDriverApiException("There is no such car!"));
         car.setModelName(modelName);
         car.setCarName(carName);

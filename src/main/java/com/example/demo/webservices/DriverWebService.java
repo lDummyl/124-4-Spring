@@ -1,11 +1,13 @@
 package com.example.demo.webservices;
 
 import com.example.demo.dto.DriverDTO;
+import com.example.demo.entities.Driver;
 import com.example.demo.services.DriverService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -26,14 +28,26 @@ public class DriverWebService {
                         .collect(Collectors.toList()));
     }
 
+    @Transactional
     public DriverDTO create(DriverDTO dto) {
-        return service.toDTO(service.create(dto));
+        return service.toDTO(service.create(
+                dto.getFirstName(),
+                dto.getLastName(),
+                dto.getAge()
+        ));
     }
 
+    @Transactional
     public DriverDTO update(DriverDTO dto) {
-        return service.toDTO(service.updateById(dto));
+        return service.toDTO(service.update(
+                dto.getId(),
+                dto.getFirstName(),
+                dto.getLastName(),
+                dto.getAge()
+        ));
     }
 
+    @Transactional
     public void delete(Integer id) {
         service.deleteById(id);
     }
