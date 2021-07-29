@@ -21,7 +21,9 @@ public class CarWebService {
 
     public List<CarDTO> getById(Optional<Integer> id) {
         return id
-                .map(integer -> Collections.singletonList(service.toDTO(service.getById(integer))))
+                .map(service::getById)
+                .map(service::toDTO)
+                .map(Collections::singletonList)
                 .orElseGet(() -> service.getAll().stream()
                         .map(service::toDTO)
                         .collect(Collectors.toList()));
