@@ -1,23 +1,16 @@
 package com.example.demo.services;
 
 
-import com.example.demo.dto.UserDetails;
-import org.springframework.stereotype.Service;
+import com.example.demo.entity.Role;
+import com.example.demo.entity.User;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-@Service
-public class UserService {
-
-    List<UserDetails> userDetailsList = new ArrayList<>();
-
-
-    public List<UserDetails> getAll() {
-        return userDetailsList;
-    }
-
-    public void add(UserDetails userDetails) {
-        userDetailsList.add(userDetails);
-    }
+public interface UserService {
+    Role saveRole(Role role);
+    User saveUser(User user);
+    void addRoleToUser(Long userId, String roleName);
+    Optional<User> getUser(Long id);
+    List<User> getUsers();
 }

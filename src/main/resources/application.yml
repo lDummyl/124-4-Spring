@@ -1,0 +1,13 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/java_extended
+    username: docker
+    password: docker
+
+  jpa:
+    show-sql: true
