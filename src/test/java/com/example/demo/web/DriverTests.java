@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @Slf4j
-@ActiveProfiles(profiles = "h2mem")
+@ActiveProfiles(profiles = "test")
 public class DriverTests {
     MockMvc mockMvc;
 
