@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author chervinko <br>
@@ -26,7 +26,7 @@ public class DriverController {
     }
 
     @GetMapping
-    public List<DriverDTO.Response.Public> getAll() {
+    public Collection<DriverDTO.Response.Public> getAll() {
         return driverDbService.getAll();
     }
 

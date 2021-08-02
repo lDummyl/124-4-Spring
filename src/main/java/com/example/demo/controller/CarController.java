@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author chervinko <br>
@@ -27,7 +27,7 @@ public class CarController {
     }
 
     @GetMapping
-    public List<CarDTO.Response.Public> getAll() {
+    public Collection<CarDTO.Response.Public> getAll() {
         return carDbService.getAll();
     }
 

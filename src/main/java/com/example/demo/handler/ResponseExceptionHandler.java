@@ -1,8 +1,8 @@
 package com.example.demo.handler;
 
-import com.example.demo.dto.ResponseErrorDTO;
 import com.example.demo.services.crud.exception.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,28 +21,28 @@ public class ResponseExceptionHandler {
     @ResponseBody
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseErrorDTO customHandleException(Exception ex, WebRequest request) {
-        return new ResponseErrorDTO(HttpStatus.BAD_REQUEST, ex.getMessage());
+    public ResponseEntity<String> customHandleException(Exception ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ResponseBody
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseErrorDTO handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
-        return new ResponseErrorDTO(HttpStatus.BAD_REQUEST, ex.getMessage());
+    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseErrorDTO handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
-        return new ResponseErrorDTO(HttpStatus.BAD_REQUEST, ex.getMessage());
+    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ResponseBody
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseErrorDTO handleConstraintViolationException(ConstraintViolationException ex, WebRequest request) {
-        return new ResponseErrorDTO(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
