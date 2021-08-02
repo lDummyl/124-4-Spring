@@ -2,6 +2,8 @@ package com.example.demo.web;
 
 import com.example.demo.dto.DriverDTO;
 import com.example.demo.repositories.DriverRepository;
+import com.example.demo.services.CarService;
+import com.example.demo.services.DriverService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,6 +24,8 @@ import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import javax.transaction.Transactional;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -35,6 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @Slf4j
 @ActiveProfiles(profiles = "test")
+@Transactional
+@Rollback
 public class DriverTests {
     MockMvc mockMvc;
 
@@ -47,6 +54,12 @@ public class DriverTests {
     @Autowired
     DriverRepository repository;
 
+    @Autowired
+    CarService carService;
+
+    @Autowired
+    DriverService driverService;
+
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
 
@@ -56,6 +69,19 @@ public class DriverTests {
                 MockMvcBuilders.webAppContextSetup(this.webApplicationContext)
                         .apply(documentationConfiguration(this.restDocumentation));
         this.mockMvc = builder.build();
+        init();
+    }
+
+    private void init() {
+        driverService.create("Sergey", "Zhak", 34);
+        driverService.create("Ivan", "Ivanov", 18);
+        driverService.create("Petr", "Petrov", 50);
+        driverService.create("Sidor", "Sidorov", 65);
+
+        carService.create("E200", "Mersedes", "Cool modern car", 1);
+        carService.create("Forrester", "Subaru", "Not so cool car", 1);
+        carService.create("2101", "VAZ", "Kopeika", 3);
+        carService.create("BELAZ", "BELAZ", "Samosval", 4);
     }
 
     @Test

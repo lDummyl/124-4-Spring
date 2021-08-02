@@ -1,7 +1,10 @@
 package com.example.demo.web;
 
 import com.example.demo.dto.CarDTO;
+import com.example.demo.entities.Driver;
 import com.example.demo.repositories.CarRepository;
+import com.example.demo.services.CarService;
+import com.example.demo.services.DriverService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,6 +24,8 @@ import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import javax.transaction.Transactional;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -33,6 +39,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @ActiveProfiles(profiles = "test")
+@Transactional
+@Rollback
 public class CarTests {
     MockMvc mockMvc;
 
@@ -45,8 +53,16 @@ public class CarTests {
     @Autowired
     CarRepository repository;
 
+    @Autowired
+    CarService carService;
+
+    @Autowired
+    DriverService driverService;
+
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
+
+    private Integer validDriverId;
 
     @Before
     public void setUp() {
@@ -54,6 +70,20 @@ public class CarTests {
                 MockMvcBuilders.webAppContextSetup(this.webApplicationContext)
                         .apply(documentationConfiguration(this.restDocumentation));
         this.mockMvc = builder.build();
+        init();
+    }
+
+    private void init() {
+        Driver validDriver = driverService.create("Sergey", "Zhak", 34);
+        validDriverId = validDriver.getId();
+        driverService.create("Ivan", "Ivanov", 18);
+        driverService.create("Petr", "Petrov", 50);
+        driverService.create("Sidor", "Sidorov", 65);
+
+        carService.create("E200", "Mersedes", "Cool modern car", 1);
+        carService.create("Forrester", "Subaru", "Not so cool car", 1);
+        carService.create("2101", "VAZ", "Kopeika", 3);
+        carService.create("BELAZ", "BELAZ", "Samosval", 4);
     }
 
     @Test
@@ -63,12 +93,13 @@ public class CarTests {
         dto.setModelName("2104");
         dto.setCarName("VAZ");
         dto.setDescription("Четырка");
-        dto.setDriverId(1);
+        dto.setDriverId(validDriverId);
         String content = objectMapper.writeValueAsString(dto);
         mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("modelName").value("2104"));
+                .andExpect(jsonPath("modelName").value("2104"))
+                .andExpect(jsonPath("id").isNotEmpty());
     }
 
     @Test
