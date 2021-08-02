@@ -1,7 +1,6 @@
 spring:
   datasource:
     url: jdbc:h2:file:./spring_test
-    driver-class-name: org.h2.Driver
     username: sa
     password: password
   h2:
@@ -20,6 +19,11 @@ spring:
     init:
       mode: always
   flyway:
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
     enabled: true
+    locations: filesystem:db/migration
+    schemas: PUBLIC
 server:
   port: 8081
