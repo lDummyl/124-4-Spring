@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 
+import com.example.demo.db.ent.CarEntity;
 import com.example.demo.db.ent.UserEntity;
 import com.example.demo.db.repo.UserRepo;
 import com.example.demo.dto.UserDetails;
@@ -11,8 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -27,7 +27,14 @@ public class UserService {
     public void init(){
         UserEntity userEntity = new UserEntity();
         userEntity.setSuperName("Oleg!");
+
+        CarEntity carEntity = new CarEntity();
+        carEntity.setModel("Lada");
+
+        userEntity.setCarEntityList(Arrays.asList(carEntity));
+
         userRepo.save(userEntity);
+
         List<UserEntity> all = userRepo.findAll();
         for (UserEntity entity : all) {
             log.info(objectMapper.writeValueAsString(entity));
