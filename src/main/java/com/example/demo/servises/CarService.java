@@ -28,7 +28,7 @@ public class CarService {
     }
 
     @Transactional
-    public Car create(String brand, String model, String description, Long DriverID){
+    public Car create(String brand, String model, String description, Integer DriverID){
         Car car = new Car();
         car.setBrand(brand);
         car.setModel(model);
@@ -37,7 +37,7 @@ public class CarService {
         return repository.save(car);
     }
 
-    public Car getByID(Long CarID){
+    public Car getByID(Integer CarID){
         Optional<Car> optionalCar = repository.findById(CarID);
         if (optionalCar.isPresent()) {
             return optionalCar.get();
@@ -50,7 +50,7 @@ public class CarService {
     }
 
     @Transactional
-    public Car update(Long id, String brand, String model, String description, Long DriverID){
+    public Car update(Integer id, String brand, String model, String description, Integer DriverID){
         Car car = repository.findById(id).orElseThrow(() -> new CommonAppExeption(NO_CAR_MESSAGE + id));
         car.setBrand(brand);
         car.setModel(model);
@@ -61,7 +61,7 @@ public class CarService {
     }
 
     @Transactional
-    public void deleteByID(Long id){
+    public void deleteByID(Integer id){
         if (!repository.existsById(id)){
             throw new CommonAppExeption(NO_CAR_MESSAGE + id);
         }

@@ -8,17 +8,17 @@ import javax.persistence.Id;
 @Entity
 public class Driver {
     private @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) Integer id;
 
     private String name;
     private String surname;
     private int age;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

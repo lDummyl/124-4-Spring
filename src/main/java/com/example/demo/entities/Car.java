@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class Car {
 
-    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Integer id;
     private String brand;
     private String model;
     private String description;
@@ -13,11 +13,11 @@ public class Car {
     @ManyToOne
     private Driver driver;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

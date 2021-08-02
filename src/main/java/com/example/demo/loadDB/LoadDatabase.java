@@ -34,10 +34,10 @@ public class LoadDatabase {
     @Bean
     CommandLineRunner initCarsDatabase() {
         return args -> {
-            log.info("Preloading car" + carService.create("Suzuki", "Jimny", "Japan's NIVA", 1L));
-            log.info("Preloading car" + carService.create("Volvo", "XC90", "It's chinese now", 2L));
-            log.info("Preloading car" + carService.create("Volkswagen", "Golf2", "Old german legend", 1L));
-            log.info("Preloading car" + carService.create("VAZ", "2101", "Old USSR legend", 3L));
+            log.info("Preloading car" + carService.create("Suzuki", "Jimny", "Japan's NIVA", 1));
+            log.info("Preloading car" + carService.create("Volvo", "XC90", "It's chinese now", 2));
+            log.info("Preloading car" + carService.create("Volkswagen", "Golf2", "Old german legend", 1));
+            log.info("Preloading car" + carService.create("VAZ", "2101", "Old USSR legend", 3));
         };
     }
 }

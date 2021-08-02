@@ -18,7 +18,7 @@ public class CarWebService {
         this.service = service;
     }
 
-    public List<CarDTO> getByID(Optional<Long> id){
+    public List<CarDTO> getByID(Optional<Integer> id){
         return id
                 .map(service::getByID)
                 .map(service::toDTO)
@@ -50,7 +50,7 @@ public class CarWebService {
     }
 
     @Transactional
-    public void delete(Long id){
+    public void delete(Integer id){
         service.deleteByID(id);
     }
 }

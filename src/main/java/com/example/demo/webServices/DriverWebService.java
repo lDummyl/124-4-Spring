@@ -21,7 +21,7 @@ public class DriverWebService {
         this.service = service;
     }
 
-    public List<DriverDTO> getByID(Optional<Long> id){
+    public List<DriverDTO> getByID(Optional<Integer> id){
         return id
                 .map(service::getById)
                 .map(service::toDTO)
@@ -70,7 +70,7 @@ public class DriverWebService {
     }
 
     @Transactional
-    public void delete(Long id){
+    public void delete(Integer id){
         service.deleteById(id);
     }
 }

@@ -31,7 +31,7 @@ public class DriverService {
         return repository.save(driver);
     }
 
-    public Driver getById(Long id) {
+    public Driver getById(Integer id) {
         Optional<Driver> optionalDriver = repository.findById(id);
         if (optionalDriver.isPresent()){
             return optionalDriver.get();
@@ -46,7 +46,7 @@ public class DriverService {
     }
 
     @Transactional
-    public Driver update(Long id, String firstname, String surname, int age){
+    public Driver update(Integer id, String firstname, String surname, int age){
         Driver driver = repository.findById(id).orElseThrow(() -> new CommonAppExeption(NO_DRIVER_MESSAGE + id));
         driver.setName(firstname);
         driver.setSurname(surname);
@@ -55,7 +55,7 @@ public class DriverService {
     }
 
     @Transactional
-    public void deleteById(Long id){
+    public void deleteById(Integer id){
         if (!repository.existsById(id)) {
             throw new CommonAppExeption(NO_DRIVER_MESSAGE + id);
         }

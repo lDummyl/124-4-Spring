@@ -18,7 +18,7 @@ public class CarController {
     }
 
     @GetMapping(value = {"", "{/id}"})
-    public List<CarDTO> getByID(@PathVariable Optional<Long> id){
+    public List<CarDTO> getByID(@PathVariable Optional<Integer> id){
         return service.getByID(id);
     }
 
@@ -33,7 +33,7 @@ public class CarController {
     }
 
     @DeleteMapping("{/id}")
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Integer id){
         service.delete(id);
     }
 }
