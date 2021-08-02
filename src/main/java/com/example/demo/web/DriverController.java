@@ -24,6 +24,7 @@ public class DriverController {
 
     private final DriverWebService service;
 
+    // TODO: 02.08.2021 отдельные методы для 1 и для списка
     @GetMapping(value = {"", "/{id}"})
     public List<DriverDTO> getById(@PathVariable Optional<Integer> id) {
         return service.getById(id);
