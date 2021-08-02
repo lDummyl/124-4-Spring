@@ -128,22 +128,22 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <version>4.0.3</version>
-                <configuration>
-                    <user>sa</user>
-                    <password>password</password>
-                    <schemas>
-                        <schema>PUBLIC</schema>
-                    </schemas>
-                    <url>jdbc:h2:file:./spring_test</url>
-                    <locations>
-                        <location>filesystem:db/migration</location>
-                    </locations>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.flywaydb</groupId>-->
+<!--                <artifactId>flyway-maven-plugin</artifactId>-->
+<!--                <version>4.0.3</version>-->
+<!--                <configuration>-->
+<!--                    <user>sa</user>-->
+<!--                    <password>password</password>-->
+<!--                    <schemas>-->
+<!--                        <schema>PUBLIC</schema>-->
+<!--                    </schemas>-->
+<!--                    <url>jdbc:h2:file:./spring_test</url>-->
+<!--                    <locations>-->
+<!--                        <location>filesystem:db/migration</location>-->
+<!--                    </locations>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 
