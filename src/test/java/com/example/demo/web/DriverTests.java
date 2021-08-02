@@ -73,7 +73,7 @@ public class DriverTests {
         mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk())
-                .andExpect((jsonPath("name").value(NAME)))
+                .andExpect((jsonPath("firstname").value(NAME)))
                 .andExpect(jsonPath("surname").value(SURNAME))
                 .andExpect(jsonPath("age").value(AGE));
     }

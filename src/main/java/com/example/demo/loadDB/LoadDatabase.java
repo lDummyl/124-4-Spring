@@ -24,7 +24,7 @@ public class LoadDatabase {
     @Bean
     CommandLineRunner initDriversDatabase() {
         return args -> {
-            log.info("Preloading driver" + driverService.create("Andrey", "Ivanov", 22).toString());
+            log.info("Preloading driver" + driverService.create("Andrey", "Ivanov", 22));
             log.info("Preloading driver" + driverService.create("Ivan", "Petrov", 28));
             log.info("Preloading driver" + driverService.create("Aleksey", "Smirnov", 35));
         };

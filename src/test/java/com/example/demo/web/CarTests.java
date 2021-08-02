@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@ActiveProfiles(profiles = "test")
+@ActiveProfiles(value = "test")
 public class CarTests {
     MockMvc mockMvc;
 
@@ -123,24 +123,5 @@ public class CarTests {
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
         Assert.assertFalse("The entity was not removed!", repository.existsById(idToDelete));
-    }
-
-    @Test
-    public void whenMethodArgumentMismatch_thenBadRequest() throws Exception {
-        String uri = "/cars/{id}";
-        mockMvc.perform(get(uri, "someVars").contentType(MediaType.APPLICATION_JSON))
-                .andDo(document(uri.replace("/", "\\")))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("errors", Matchers.contains("id should be of type java.util.Optional")));
-    }
-
-    @Test
-    public void whenInternalException_thenBadRequest() throws Exception {
-        String uri = "/cars/{id}";
-        Integer idToDelete = -1;
-        mockMvc.perform(delete(uri, idToDelete).contentType(MediaType.APPLICATION_JSON))
-                .andDo(document(uri.replace("/", "\\")))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("errors", Matchers.contains("There is no such car!")));
     }
 }
