@@ -1,3 +1,10 @@
 spring:
   datasource:
     url: jdbc:h2:mem:spring_test
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false

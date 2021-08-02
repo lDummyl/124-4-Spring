@@ -13,11 +13,13 @@ spring:
         web-allow-others: false
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    generate-ddl: true
+    generate-ddl: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
   sql:
     init:
       mode: always
+  flyway:
+    enabled: true
 server:
   port: 8081
