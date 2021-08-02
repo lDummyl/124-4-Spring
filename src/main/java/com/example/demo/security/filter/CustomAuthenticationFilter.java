@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.example.demo.AppConstant.SECRET_KEY;
+import static com.example.demo.security.AppConstant.SECRET_KEY;
 
 @Slf4j
 @RequiredArgsConstructor

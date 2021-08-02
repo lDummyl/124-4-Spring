@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -74,28 +75,22 @@ public class DriverControllerTest {
         drivers.add(driver);
         when(driverService.getDrivers()).thenReturn(drivers);
 
+        String s = objectMapper.writeValueAsString(driver);
+
         String uri = "/api/driver/all";
         mockMvc.perform(get(uri)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk())
                 .andExpect(content()
-                        .string(
-                                "[{" +
-                                        "\"id\":111," +
-                                        "\"firstName\":\"Vin\"," +
-                                        "\"lastName\":\"Diesel\"," +
-                                        "\"driverLicense\":\"777777\"," +
-                                        "\"createDate\":null," +
-                                        "\"updateDate\":null," +
-                                        "\"cars\":null" +
-                                        "}]"
-                        ));
+                        .string(Collections.singletonList(s).toString()));
     }
 
     @Test
     public void getDriver() throws Exception {
         when(driverService.getDriver(any())).thenReturn(java.util.Optional.ofNullable(driver));
+
+        String s = objectMapper.writeValueAsString(driver);
 
         String uri = "/api/driver/111";
         mockMvc.perform(get(uri)
@@ -103,59 +98,33 @@ public class DriverControllerTest {
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk())
                 .andExpect(content()
-                        .string(
-                                "{" +
-                                        "\"id\":111," +
-                                        "\"firstName\":\"Vin\"," +
-                                        "\"lastName\":\"Diesel\"," +
-                                        "\"driverLicense\":\"777777\"," +
-                                        "\"createDate\":null," +
-                                        "\"updateDate\":null," +
-                                        "\"cars\":null" +
-                                        "}"
-                        ));
+                        .string(s));
     }
 
     @Test
     public void saveDriver201() throws Exception {
         when(driverService.saveDriver(any())).thenReturn(driver);
 
+        String s = objectMapper.writeValueAsString(driver);
+
         String uri = "/api/driver/save";
         mockMvc.perform(post(uri)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "  \"id\": null,\n" +
-                        "  \"firstName\": \"Vin\",\n" +
-                        "  \"lastName\": \"Diesel\",\n" +
-                        "  \"driverLicense\": \"777777\"\n" +
-                        "}"))
+                .content(s))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isCreated())
                 .andExpect(content()
-                        .string(
-                                "{" +
-                                        "\"id\":111," +
-                                        "\"firstName\":\"Vin\"," +
-                                        "\"lastName\":\"Diesel\"," +
-                                        "\"driverLicense\":\"777777\"," +
-                                        "\"createDate\":null," +
-                                        "\"updateDate\":null," +
-                                        "\"cars\":null" +
-                                        "}"
-                        ));
+                        .string(s));
     }
 
     @Test
     public void updateDriverIsOk() throws Exception {
+        String s = objectMapper.writeValueAsString(driver);
+
         String uri = "/api/driver/update";
         mockMvc.perform(put(uri)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "  \"id\": null,\n" +
-                        "  \"firstName\": \"Vin\",\n" +
-                        "  \"lastName\": \"Diesel\",\n" +
-                        "  \"driverLicense\": \"777777\"\n" +
-                        "}"))
+                .content(s))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
     }

@@ -1,6 +1,7 @@
 package com.example.demo.services.impl;
 
 import com.example.demo.entity.Driver;
+import com.example.demo.exception.BusinessException;
 import com.example.demo.model.request.DriverUpdate;
 import com.example.demo.repository.DriverRepository;
 import com.example.demo.services.DriverService;
@@ -32,7 +33,7 @@ public class DriverServiceImpl implements DriverService {
             log.info("Update driver, id: {}", update.getId());
             response = "Driver updated successfully!";
         } else {
-            response = "Driver not found!";
+            throw new BusinessException("Driver not found!");
         }
 
         return response;
@@ -56,7 +57,7 @@ public class DriverServiceImpl implements DriverService {
             driverRepository.delete(byId.get());
             log.info("Driver {} was deleted!", id);
             response = "Driver " + id + "  was deleted!";
-        } else response = "Driver not found";
+        } else throw new BusinessException("Driver not found");
 
         return response;
     }

@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.example.demo.AppConstant.SECRET_KEY;
+import static com.example.demo.security.AppConstant.SECRET_KEY;
 import static java.util.Arrays.stream;
 
 @Slf4j

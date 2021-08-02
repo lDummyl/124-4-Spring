@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Car;
 import com.example.demo.services.CarService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,9 +19,7 @@ import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -73,27 +72,22 @@ public class CarControllerTest {
         cars.add(car);
         when(carService.getCars()).thenReturn(cars);
 
+        String s = objectMapper.writeValueAsString(car);
+
         String uri = "/api/car/all";
         mockMvc.perform(get(uri)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk())
                 .andExpect(content()
-                        .string(
-                                "[{" +
-                                        "\"id\":100," +
-                                        "\"brand\":\"BMW\"," +
-                                        "\"model\":\"X7\"," +
-                                        "\"category\":\"B\"," +
-                                        "\"createDate\":null" +
-                                        "}]"
-                        ));
-
+                        .string(Collections.singletonList(s).toString()));
     }
 
     @Test
     public void getCar() throws Exception {
         when(carService.getCar(any())).thenReturn(Optional.of(car));
+
+        String s = objectMapper.writeValueAsString(car);
 
         String uri = "/api/car/100";
         mockMvc.perform(get(uri)
@@ -101,15 +95,7 @@ public class CarControllerTest {
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk())
                 .andExpect(content()
-                        .string(
-                                "{" +
-                                        "\"id\":100," +
-                                        "\"brand\":\"BMW\"," +
-                                        "\"model\":\"X7\"," +
-                                        "\"category\":\"B\"," +
-                                        "\"createDate\":null" +
-                                        "}"
-                        ));
+                        .string(s));
 
     }
 
@@ -118,27 +104,16 @@ public class CarControllerTest {
     public void saveCar_thenHttp201() throws Exception {
         when(carService.saveCar(any())).thenReturn(car);
 
+        String s = objectMapper.writeValueAsString(car);
+
         String uri = "/api/car/save";
         mockMvc.perform(post(uri)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "  \"brand\": \"BMW\",\n" +
-                        "  \"model\": \"X7\",\n" +
-                        "  \"category\": \"B\",\n" +
-                        "  \"driverId\": 22\n" +
-                        "}"))
+                .content(s))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isCreated())
                 .andExpect(content()
-                        .string(
-                                "{" +
-                                        "\"id\":100," +
-                                        "\"brand\":\"BMW\"," +
-                                        "\"model\":\"X7\"," +
-                                        "\"category\":\"B\"," +
-                                        "\"createDate\":null" +
-                                        "}"
-                        ));
+                        .string(s));
     }
 
 
@@ -156,15 +131,12 @@ public class CarControllerTest {
 
     @Test
     public void updateTest() throws Exception {
+        String s = objectMapper.writeValueAsString(car);
+
         String uri = "/api/car/update";
         mockMvc.perform(put(uri)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "  \"brand\": \"BMW\",\n" +
-                        "  \"model\": \"X7\",\n" +
-                        "  \"category\": \"B\",\n" +
-                        "  \"driverId\": 22\n" +
-                        "}"))
+                .content(s))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
     }
