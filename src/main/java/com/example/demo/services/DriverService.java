@@ -7,6 +7,8 @@ import com.example.demo.repositories.CarRepository;
 import com.example.demo.repositories.DriverRepository;
 import com.google.common.collect.Streams;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,41 +22,49 @@ public class DriverService {
     private final CarRepository carRepository;
     private final Converter converter;
 
-    public Iterable<DriverDTO> findAll(){
-        return Streams.stream(repository.findAll())
+    public ResponseEntity findAll(){
+        return new ResponseEntity(Streams.stream(repository.findAll())
                 .map(converter::driverToDTO)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 
-    public DriverDTO findById(Integer id){
+    public ResponseEntity findById(Integer id){
         Optional<Driver> driver = repository.findById(id);
         if(driver.isEmpty())
-            return new DriverDTO();
+            return new ResponseEntity("Driver with id:" + id + " don't exist.", HttpStatus.BAD_REQUEST);
         else
-            return converter.driverToDTO(driver.get());
+            return new ResponseEntity(converter.driverToDTO(driver.get()), HttpStatus.OK);
     }
 
-    public DriverDTO save(DriverDTO driverDTO){
-        return converter.driverToDTO(repository.save(converter.driverFromDTO(driverDTO)));
+    public ResponseEntity save(DriverDTO driverDTO){
+        if(driverDTO == null)
+            return new ResponseEntity("Can not save driver.", HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity(converter.driverToDTO(repository.save(converter.driverFromDTO(driverDTO))),
+                    HttpStatus.OK);
     }
 
-    public Iterable<DriverDTO> saveAll(Iterable<DriverDTO> drivers){
+    public ResponseEntity saveAll(Iterable<DriverDTO> drivers){
         var response = repository.saveAll(converter.driverListFromIterableDTO(drivers));
-        return converter.driverIterableFromIterableDrivers(response);
+        return new ResponseEntity(converter.driverIterableFromIterableDrivers(response), HttpStatus.OK);
     }
 
-    public DriverDTO update(DriverDTO driver){
-        var driverDTO = findById(driver.getId());
-        driverDTO.update(driver);
-        return save(driverDTO);
+    public ResponseEntity update(DriverDTO driver){
+        if(repository.existsById(driver.getId())) {
+            var driverDTO = (DriverDTO) findById(driver.getId()).getBody();
+            driverDTO.update(driver);
+            return new ResponseEntity(save(driverDTO), HttpStatus.OK);
+        } else
+            return new ResponseEntity("Can not update driver.", HttpStatus.BAD_REQUEST);
     }
 
-    public DriverDTO delete(Integer id){
+    public ResponseEntity delete(Integer id){
         if(repository.existsById(id)) {
-            var driver = findById(id);
+            var driver = findById(id).getBody();
             repository.deleteById(id);
-            return driver;
+            return new ResponseEntity(driver, HttpStatus.OK);
         }
-        else throw new RuntimeException("No such element!");
+        else return new ResponseEntity("Can not delete driver.", HttpStatus.BAD_REQUEST);
     }
 }

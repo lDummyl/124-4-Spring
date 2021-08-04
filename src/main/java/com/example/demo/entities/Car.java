@@ -1,8 +1,6 @@
 package com.example.demo.entities;
 
 import lombok.Data;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.List;

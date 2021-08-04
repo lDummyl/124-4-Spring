@@ -7,6 +7,8 @@ import com.example.demo.repositories.CarRepository;
 import com.example.demo.repositories.DriverRepository;
 import com.google.common.collect.Streams;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,71 +18,77 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CarService {
 
+
     private final CarRepository repository;
     private final DriverRepository driverRepository;
     private final Converter converter;
 
-    public Iterable<CarDTO> findAll(){
-        return Streams.stream(repository.findAll())
+    public ResponseEntity findAll(){
+        return new ResponseEntity(Streams.stream(repository.findAll())
                 .map(converter::carToDTO)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 
-    public CarDTO findById(Integer id){
+    public ResponseEntity findById(Integer id){
         Optional<Car> car = repository.findById(id);
         if(car.isEmpty())
-            return new CarDTO();
+            return new ResponseEntity<>("Car with id:" + id + " don't exist.", HttpStatus.BAD_REQUEST);
         else
-            return converter.carToDTO(car.get());
+            return new ResponseEntity<>(converter.carToDTO(car.get()), HttpStatus.OK);
     }
 
-    public CarDTO save(CarDTO carDTO){
-        return converter.carToDTO(repository.save(converter.carFromDTO(carDTO)));
+    public ResponseEntity save(CarDTO carDTO){
+        if(carDTO == null) return new ResponseEntity<>("Can not save that car.", HttpStatus.BAD_REQUEST);
+        else return new ResponseEntity(converter.carToDTO(repository.save(converter.carFromDTO(carDTO))), HttpStatus.OK);
     }
 
-    public Iterable<CarDTO> saveAll(Iterable<CarDTO> cars){
+    public ResponseEntity saveAll(Iterable<CarDTO> cars){
         var response = repository.saveAll(converter.carListFromIterableDTO(cars));
-        return converter.carIterableFromIterableCar(response);
+        return new ResponseEntity(converter.carIterableFromIterableCar(response), HttpStatus.OK);
     }
 
-    public CarDTO update(CarDTO car){
-        var carDTO = findById(car.getId());
-        carDTO.update(car);
-        return save(carDTO);
+    public ResponseEntity update(CarDTO car){
+        if(car != null) {
+            var carDTO = (CarDTO) findById(car.getId()).getBody();
+            carDTO.update(car);
+            return save(carDTO);
+        } else
+            return new ResponseEntity<>("Can not update that car.", HttpStatus.BAD_REQUEST);
     }
 
-    public CarDTO addDriver(Integer carId, Integer driverId){
+    public ResponseEntity addDriver(Integer carId, Integer driverId){
         var carOptional = repository.findById(carId);
         var driverOptional = driverRepository.findById(driverId);
         if(carOptional.isEmpty() || driverOptional.isEmpty())
-            throw new RuntimeException("No such element!");
+            return new ResponseEntity("Can not add driver.", HttpStatus.BAD_REQUEST);
         else {
             var car = carOptional.get();
             var driver = driverOptional.get();
             car.getDrivers().add(driver);
-            return converter.carToDTO(repository.save(car));
+            return new ResponseEntity<>(converter.carToDTO(repository.save(car)), HttpStatus.OK);
         }
     }
 
-    public CarDTO removeDriver(Integer carId, Integer driverId){
+    public ResponseEntity removeDriver(Integer carId, Integer driverId){
         var carOptional = repository.findById(carId);
         var driverOptional = driverRepository.findById(driverId);
         if(carOptional.isEmpty() || driverOptional.isEmpty())
-            throw new RuntimeException("No such element!");
+            return new ResponseEntity("Can not remove driver.", HttpStatus.BAD_REQUEST);
         else {
             var car = carOptional.get();
             var driver = driverOptional.get();
             car.getDrivers().remove(driver);
-            return converter.carToDTO(repository.save(car));
+            return new ResponseEntity(converter.carToDTO(repository.save(car)), HttpStatus.OK);
         }
     }
 
-    public CarDTO delete(Integer id){
+    public ResponseEntity delete(Integer id){
         if(repository.existsById(id)) {
-            var car = findById(id);
+            var car = (CarDTO) findById(id).getBody();
             repository.deleteById(id);
-            return car;
+            return new ResponseEntity(car, HttpStatus.OK);
         }
-        else throw new RuntimeException("No such element!");
+        else return new ResponseEntity("Can no delete that car.", HttpStatus.BAD_REQUEST);
     }
 }

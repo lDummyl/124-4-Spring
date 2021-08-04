@@ -10,8 +10,11 @@ public class DriverDTO {
     private String phone;
 
     public void update(DriverDTO driver){
-        this.name = driver.getName();
-        this.surname = driver.getSurname();
-        this.phone = driver.getPhone();
+        if(driver.getName() != null)
+            this.name = driver.getName();
+        if(driver.getSurname() != null)
+            this.surname = driver.getSurname();
+        if(driver.getPhone() != null)
+            this.phone = driver.getPhone();
     }
 }

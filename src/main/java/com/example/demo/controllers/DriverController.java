@@ -5,47 +5,48 @@ import com.example.demo.services.DriverService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/driver")
+@RequestMapping("/driver/")
 public class DriverController {
 
     private final DriverService driverService;
     private final ObjectMapper objectMapper;
 
     @GetMapping("/all")
-    public Iterable<DriverDTO> findAll(){
+    public ResponseEntity findAll(){
         return driverService.findAll();
     }
 
-    @GetMapping("/id/{id}")
-    public DriverDTO findById(@PathVariable Integer id){
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable Integer id){
         return driverService.findById(id);
     }
 
 
-    @PostMapping("/new")
-    public DriverDTO save(@RequestBody String params) throws JsonProcessingException{
+    @PostMapping
+    public ResponseEntity save(@RequestBody String params) throws JsonProcessingException{
         return driverService.save(objectMapper.readValue(params, DriverDTO.class));
     }
 
-    @PostMapping("/update")
-    public DriverDTO update(@RequestBody String params) throws JsonProcessingException{
+    @PutMapping
+    public ResponseEntity update(@RequestBody String params) throws JsonProcessingException{
         return driverService.update(objectMapper.readValue(params, DriverDTO.class));
     }
 
     @PostMapping("/newList")
-    public Iterable<DriverDTO> saveAll(@RequestBody String params) throws JsonProcessingException{
+    public ResponseEntity saveAll(@RequestBody String params) throws JsonProcessingException{
         var list = Arrays.asList(objectMapper.readValue(params, DriverDTO[].class));
         return driverService.saveAll(list);
     }
 
-    @GetMapping("/delete/{id}")
-    public DriverDTO delete(@PathVariable Integer id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Integer id){
         return driverService.delete(id);
     }
 }
