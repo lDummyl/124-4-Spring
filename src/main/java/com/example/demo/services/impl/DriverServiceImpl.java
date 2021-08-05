@@ -73,6 +73,7 @@ public class DriverServiceImpl implements DriverService {
             throw new CarDriverApiException(DTO_MUST_NOT_BE_NULL_MESSAGE);
         }
         DriverDTO dto = new DriverDTO();
+        dto.setId(driverEntity.getId());
         dto.setFirstName(driverEntity.getFirstName());
         dto.setLastName(driverEntity.getLastName());
         dto.setAge(driverEntity.getAge());
