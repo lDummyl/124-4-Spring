@@ -5,6 +5,7 @@ import com.example.demo.model.request.CarRequest;
 import com.example.demo.services.CarService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -53,6 +55,19 @@ public class CarController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         return ResponseEntity.ok().body(carService.deleteCar(id));
+    }
+
+    @GetMapping("/findbyuserage")
+    public ResponseEntity<Set<Car>> getCarsByUserAge(@RequestParam Integer age) {
+        return ResponseEntity.ok().body(carService.getAllByUserAge(age));
+    }
+
+    @GetMapping("/pageable")
+    public ResponseEntity<Page<Car>> getCarsSorted(@RequestParam Integer page,
+                                                   @RequestParam Integer size,
+                                                   @RequestParam(name = "sortby") String sortedBy) {
+        System.out.println(page + " " + size + " " + sortedBy);
+        return ResponseEntity.ok().body(carService.getPageableCarAndSort(page,size,sortedBy));
     }
 
 }

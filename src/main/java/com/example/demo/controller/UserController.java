@@ -33,6 +33,7 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.saveUser(user));
     }
 
+    //добавление новой роли
     @PostMapping("/role/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -40,7 +41,8 @@ public class UserController {
         return ResponseEntity.created(uri).body(userService.saveRole(role));
     }
 
-    @PostMapping("/role/addtouser")
+    //добавление роли пользователю
+    @PostMapping("/addrole")
     public ResponseEntity<?> addRoleToUser(@RequestBody UserToRoleModel model) {
         userService.addRoleToUser(model.getUserId(), model.getRoleName());
         return ResponseEntity.ok("OK");

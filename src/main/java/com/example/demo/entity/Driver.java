@@ -10,7 +10,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Set;
 
 
 @Entity
@@ -20,6 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Table( name = "driver")
 @EntityListeners(AuditingEntityListener.class)
+@Deprecated
 public class Driver {
 
     @Id
@@ -33,10 +33,10 @@ public class Driver {
     @LastModifiedDate
     private Timestamp updateDate;
 
-    @OneToMany(mappedBy = "driver",
+/*    @OneToMany(mappedBy = "driver",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
-    private Set<Car> cars;
+    private Set<Car> cars;*/
 
 
     @Override

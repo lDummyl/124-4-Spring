@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
@@ -25,6 +26,12 @@ public class CarRepositoryTest {
     public void findByUsernameTest() {
         Optional<Car> byId = carRepository.findById(1L);
         assertTrue(byId.isPresent());
+    }
+
+    @Test
+    public void getCarsByUserAgeTest() {
+        Set<Car> carsByUserAge = carRepository.getCarsByUserAge(1);
+        assert (carsByUserAge.size() > 0);
     }
 
 }

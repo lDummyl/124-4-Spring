@@ -16,7 +16,8 @@ create table if not exists users
     lastname varchar(30),
     username varchar(30),
     password varchar(100),
-    user_status integer
+    user_status integer,
+    age integer
     );
 
 create unique index if not exists users_id_uindex
@@ -57,7 +58,10 @@ create table if not exists car
     constraint car_driver_id_fk
     references driver
     on update cascade on delete cascade,
-    category char
+    category_ char,
+    user_id bigint
+    constraint car_users_id_fk
+    references users
 );
 
 

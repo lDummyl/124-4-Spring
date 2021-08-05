@@ -50,29 +50,21 @@ public class CarControllerTest {
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
 
-    Car car;
-
     @Before
     public void setUp() {
         ConfigurableMockMvcBuilder builder =
                 MockMvcBuilders.webAppContextSetup(this.webApplicationContext)
                         .apply(documentationConfiguration(this.restDocumentation));
         this.mockMvc = builder.build();
-
-        car = new Car();
-        car.setId(100L);
-        car.setBrand("BMW");
-        car.setModel("X7");
-        car.setCategory('B');
     }
 
     @Test
     public void getAll() throws Exception {
         List<Car> cars = new ArrayList<>();
-        cars.add(car);
+        cars.add(getCar());
         when(carService.getCars()).thenReturn(cars);
 
-        String s = objectMapper.writeValueAsString(car);
+        String s = objectMapper.writeValueAsString(getCar());
 
         String uri = "/api/car/all";
         mockMvc.perform(get(uri)
@@ -84,10 +76,10 @@ public class CarControllerTest {
     }
 
     @Test
-    public void getCar() throws Exception {
-        when(carService.getCar(any())).thenReturn(Optional.of(car));
+    public void getOneCar() throws Exception {
+        when(carService.getCar(any())).thenReturn(Optional.of(getCar()));
 
-        String s = objectMapper.writeValueAsString(car);
+        String s = objectMapper.writeValueAsString(getCar());
 
         String uri = "/api/car/100";
         mockMvc.perform(get(uri)
@@ -102,9 +94,9 @@ public class CarControllerTest {
 
     @Test
     public void saveCar_thenHttp201() throws Exception {
-        when(carService.saveCar(any())).thenReturn(car);
+        when(carService.saveCar(any())).thenReturn(getCar());
 
-        String s = objectMapper.writeValueAsString(car);
+        String s = objectMapper.writeValueAsString(getCar());
 
         String uri = "/api/car/save";
         mockMvc.perform(post(uri)
@@ -119,19 +111,19 @@ public class CarControllerTest {
 
     @Test
     public void saveCar_thenHttp400() throws Exception {
-        when(carService.saveCar(any())).thenReturn(car);
+        when(carService.saveCar(any())).thenReturn(getCar());
 
         String uri = "/api/car/save";
         mockMvc.perform(post(uri)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(String.valueOf(car)))
+                .content(String.valueOf(getCar())))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void updateTest() throws Exception {
-        String s = objectMapper.writeValueAsString(car);
+        String s = objectMapper.writeValueAsString(getCar());
 
         String uri = "/api/car/update";
         mockMvc.perform(put(uri)
@@ -148,6 +140,35 @@ public class CarControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getCarsByUserAgeTestHttp200() throws Exception {
+        String uri = "/api/car/findbyuserage?age=10";
+        mockMvc.perform(get(uri)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getPageableCarAndSortHttp200() throws Exception {
+        String uri = "/api/car/pageable?page=0&size=100&sortby=id";
+        mockMvc.perform(get(uri)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isOk());
+    }
+
+    private Car getCar() {
+        Car car;
+        car = new Car();
+        car.setId(100L);
+        car.setBrand("BMW");
+        car.setModel("X7");
+        car.setCategory('B');
+
+        return car;
     }
 
 }

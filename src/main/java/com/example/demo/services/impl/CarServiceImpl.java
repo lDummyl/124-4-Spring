@@ -9,10 +9,15 @@ import com.example.demo.repository.DriverRepository;
 import com.example.demo.services.CarService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -82,11 +87,21 @@ public class CarServiceImpl implements CarService {
         return response;
     }
 
+    @Override
+    public Set<Car> getAllByUserAge(Integer age) {
+        return carRepository.getCarsByUserAge(age);
+    }
+
+    public Page<Car> getPageableCarAndSort(int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        return carRepository.getAllSort(pageable);
+    }
+
     private Car mapperUpdateCarToCar(CarRequest update, Car car, Driver driver) {
         car.setModel(update.getModel());
         car.setBrand(update.getBrand());
         car.setCategory(update.getCategory());
-        car.setDriver(driver);
+       // car.setDriver(driver);
         return car;
     }
 

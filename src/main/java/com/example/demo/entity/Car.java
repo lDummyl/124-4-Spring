@@ -27,14 +27,27 @@ public class Car {
     private Long id;
     private String brand;
     private String model;
+    @Column(name = "category_")
     private Character category;
     @CreatedDate
     private Timestamp createDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+   /* @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="driver_id", nullable=false)
     @JsonIgnore
-    private Driver driver;
+    private Driver driver;*/
+
+
+
+/*    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id", nullable=false)
+    @JsonIgnore
+    private User user;*/
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIgnore
+    private User user;
 
     @Override
     public String toString() {
@@ -42,8 +55,9 @@ public class Car {
                 "id=" + id +
                 ", brand='" + brand + '\'' +
                 ", model='" + model + '\'' +
+                ", category=" + category +
                 ", createDate=" + createDate +
-                ", driver=" + driver +
+                ", user=" + user +
                 '}';
     }
 }

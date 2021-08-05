@@ -53,7 +53,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + (1000 * 60) + 60))
+                .withExpiresAt(new Date(System.currentTimeMillis() + (1000 * 60) * 60)) //especially for Dmitriy, this is the current time plus 60 minutes
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
@@ -62,7 +62,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         String refresh_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + (1000 * 60) + 300))
+                .withExpiresAt(new Date(System.currentTimeMillis() + (1000 * 60) * 300))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 
