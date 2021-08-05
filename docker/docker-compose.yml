@@ -1,0 +1,15 @@
+version: '2.0'
+
+services:
+  cardriverservice:
+    container_name: car_driver_container
+    image: szhak/spring-test:latest
+    ports:
+      - "8080:8081"
+    networks:
+      - car-driver-network
+    restart: unless-stopped
+
+networks:
+  car-driver-network:
+    driver: bridge
