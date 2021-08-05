@@ -24,6 +24,5 @@ spring:
     password: ${spring.datasource.password}
     enabled: true
     locations: filesystem:db/migration
-    schemas: PUBLIC
 server:
   port: 8081

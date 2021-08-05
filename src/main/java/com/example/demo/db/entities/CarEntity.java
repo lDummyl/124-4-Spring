@@ -1,4 +1,4 @@
-package com.example.demo.entities;
+package com.example.demo.db.entities;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,11 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-@Entity
+@Entity(name = "CAR")
 @Getter
 @Setter
 @ToString
-public class Car {
+public class CarEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,6 +29,5 @@ public class Car {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @ToString.Exclude
-    private Driver driver;
+    private DriverEntity driver;
 }

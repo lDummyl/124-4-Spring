@@ -1,7 +1,5 @@
-package com.example.demo.webservices;
+package com.example.demo.exceptions;
 
-import com.example.demo.exceptions.ApiError;
-import com.example.demo.exceptions.CarDriverApiException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

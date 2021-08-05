@@ -1,4 +1,4 @@
-package com.example.demo.entities;
+package com.example.demo.db.entities;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,18 +9,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity
+@Entity(name = "USER")
 @Getter
 @Setter
 @ToString
-public class Driver {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String firstName;
+    private String name;
 
-    private String lastName;
-
-    private Integer age;
+    private String description;
 }
