@@ -16,6 +16,5 @@ spring:
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}
     enabled: true
-    locations: filesystem:db/migration, filesystem:db/testmigration
 server:
   port: 8081
