@@ -15,7 +15,7 @@ public class Car {
 
     private String model;
 
-    @OneToMany
+    @OneToMany()
     private List<Driver> drivers;
 
 }

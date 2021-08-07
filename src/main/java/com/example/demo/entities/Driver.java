@@ -14,5 +14,9 @@ public class Driver {
     private String name;
     private String surname;
     private String phone;
+    private Integer age;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address address;
 
 }

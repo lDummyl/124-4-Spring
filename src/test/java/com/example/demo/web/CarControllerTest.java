@@ -2,6 +2,7 @@ package com.example.demo.web;
 
 import com.example.demo.converters.Converter;
 import com.example.demo.dto.CarDTO;
+import com.example.demo.exceptions.CarDriverException;
 import com.example.demo.services.CarService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -13,10 +14,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder;
@@ -26,6 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -70,6 +70,11 @@ public class CarControllerTest {
         objectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
 
+        init();
+
+    }
+
+    private void init() {
         list = new ArrayList<>();
         carDTO1 = new CarDTO();
         carDTO1.setModel("Hyundai Solaris");
@@ -145,5 +150,14 @@ public class CarControllerTest {
                 .andDo(document("." + uri))
                 .andExpect(jsonPath("id").value(2))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void catchException() throws Exception {
+        String uri = "/car/100";
+        mockMvc.perform(get(uri))
+                .andDo(document("." + uri))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof CarDriverException));
     }
 }

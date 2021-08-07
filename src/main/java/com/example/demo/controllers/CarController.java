@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,46 +20,45 @@ public class CarController {
     private final ObjectMapper objectMapper;
 
     @GetMapping("/all")
-    public ResponseEntity findAll(){
+    public ResponseEntity<List<CarDTO>> findAll(){
         return carService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable Integer id){
+    public ResponseEntity<CarDTO> findById(@PathVariable Integer id){
         return carService.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity save(@RequestBody String params) throws JsonProcessingException{
-        return carService.save(objectMapper.readValue(params, CarDTO.class));
+    public ResponseEntity<CarDTO> save(@RequestBody CarDTO carDTO) {
+        return carService.save(carDTO);
     }
 
     @PutMapping
-    public ResponseEntity update(@RequestBody String params) throws JsonProcessingException{
-        var car = objectMapper.readValue(params, CarDTO.class);
-        return carService.update(car);
+    public ResponseEntity<CarDTO> update(@RequestBody CarDTO carDTO) {
+        return carService.update(carDTO);
     }
 
     @PostMapping("/newList")
-    public ResponseEntity saveAll(@RequestBody String params) throws JsonProcessingException{
-        var list = Arrays.asList(objectMapper.readValue(params, CarDTO[].class));
+    public ResponseEntity<List<CarDTO>> saveAll(@RequestBody List<CarDTO> list) {
         return carService.saveAll(list);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Integer id){
+    public ResponseEntity<CarDTO> delete(@PathVariable Integer id){
         return carService.delete(id);
     }
 
     @GetMapping("/set/{carId}/{driverId}")
-    public ResponseEntity setDriver(@PathVariable Integer carId,
+    public ResponseEntity<CarDTO> setDriver(@PathVariable Integer carId,
                             @PathVariable Integer driverId){
         return carService.addDriver(carId, driverId);
     }
 
     @GetMapping("/remove/{carId}/{driverId}")
-    public ResponseEntity removeDriver(@PathVariable Integer carId,
+    public ResponseEntity<CarDTO> removeDriver(@PathVariable Integer carId,
                                @PathVariable Integer driverId){
         return carService.removeDriver(carId, driverId);
     }
+
 }

@@ -2,13 +2,12 @@ package com.example.demo.controllers;
 
 import com.example.demo.dto.DriverDTO;
 import com.example.demo.services.DriverService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,34 +18,34 @@ public class DriverController {
     private final ObjectMapper objectMapper;
 
     @GetMapping("/all")
-    public ResponseEntity findAll(){
+    public ResponseEntity<List<DriverDTO>> findAll(){
         return driverService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable Integer id){
+    public ResponseEntity<DriverDTO> findById(@PathVariable Integer id){
         return driverService.findById(id);
     }
 
 
     @PostMapping
-    public ResponseEntity save(@RequestBody String params) throws JsonProcessingException{
-        return driverService.save(objectMapper.readValue(params, DriverDTO.class));
+    public ResponseEntity<DriverDTO> save(@RequestBody DriverDTO driverDTO) {
+        return driverService.save(driverDTO);
     }
 
     @PutMapping
-    public ResponseEntity update(@RequestBody String params) throws JsonProcessingException{
-        return driverService.update(objectMapper.readValue(params, DriverDTO.class));
+    public ResponseEntity<DriverDTO> update(@RequestBody DriverDTO driverDTO) {
+        return driverService.update(driverDTO);
     }
 
     @PostMapping("/newList")
-    public ResponseEntity saveAll(@RequestBody String params) throws JsonProcessingException{
-        var list = Arrays.asList(objectMapper.readValue(params, DriverDTO[].class));
+    public ResponseEntity<List<DriverDTO>> saveAll(@RequestBody List<DriverDTO> list) {
         return driverService.saveAll(list);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Integer id){
+    public ResponseEntity<DriverDTO> delete(@PathVariable Integer id){
         return driverService.delete(id);
     }
+
 }

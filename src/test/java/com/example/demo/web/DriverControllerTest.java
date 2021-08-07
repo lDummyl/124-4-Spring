@@ -2,6 +2,7 @@ package com.example.demo.web;
 
 import com.example.demo.converters.Converter;
 import com.example.demo.dto.DriverDTO;
+import com.example.demo.exceptions.CarDriverException;
 import com.example.demo.services.DriverService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -13,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -25,11 +25,11 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.assertTrue;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -72,6 +72,10 @@ public class DriverControllerTest {
         objectMapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
         objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
 
+        init();
+    }
+
+    private void init(){
         driverDTO1 = new DriverDTO();
         driverDTO1.setName("Vasily");
         driverDTO1.setSurname("Pupkin");
@@ -141,7 +145,6 @@ public class DriverControllerTest {
         mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON)
                         .content(objectWriter.writeValueAsString(driverDTO1)))
                 .andDo(document("." + uri))
-                .andDo(print())
                 .andExpect(jsonPath("body.id").value(2))
                 .andExpect(jsonPath("body.name").value("Dima"))
                 .andExpect(status().isOk());
@@ -152,8 +155,16 @@ public class DriverControllerTest {
         String uri = "/driver/3";
         mockMvc.perform(delete(uri))
                 .andDo(document("." + uri))
-                .andDo(print())
                 .andExpect(jsonPath("id").value(3))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void catchException() throws Exception {
+        String uri = "/driver/100";
+        mockMvc.perform(get(uri))
+                .andDo(document("." + uri))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof CarDriverException));
     }
 }

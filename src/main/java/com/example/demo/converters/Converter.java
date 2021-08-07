@@ -19,6 +19,8 @@ public class Converter {
         driverDTO.setName(driver.getName());
         driverDTO.setSurname(driver.getSurname());
         driverDTO.setPhone(driver.getPhone());
+        driverDTO.setAge(driver.getAge());
+        driverDTO.setAddress(driver.getAddress());
         return driverDTO;
     }
 
@@ -36,6 +38,8 @@ public class Converter {
         driver.setSurname(driverDTO.getSurname());
         driver.setPhone(driverDTO.getPhone());
         driver.setId(driverDTO.getId());
+        driver.setAge(driverDTO.getAge());
+        driver.setAddress(driverDTO.getAddress());
         return driver;
     }
 
@@ -59,7 +63,7 @@ public class Converter {
         return Streams.stream(drivers).map(this::driverFromDTO).collect(Collectors.toList());
     }
 
-    public Iterable<DriverDTO> driverIterableFromIterableDrivers(Iterable<Driver> drivers){
+    public List<DriverDTO> driverIterableFromIterableDrivers(Iterable<Driver> drivers){
         return Streams.stream(drivers).map(this::driverToDTO).collect(Collectors.toList());
     }
 
@@ -67,7 +71,7 @@ public class Converter {
         return Streams.stream(cars).map(this::carFromDTO).collect(Collectors.toList());
     }
 
-    public Iterable<CarDTO> carIterableFromIterableCar(Iterable<Car> cars){
+    public List<CarDTO> carIterableFromIterableCar(Iterable<Car> cars){
         return Streams.stream(cars).map(this::carToDTO).collect(Collectors.toList());
     }
 }
