@@ -1,7 +1,7 @@
 package com.example.demo.web;
 
-import com.example.demo.dto.CarDTO;
 import com.example.demo.db.repositories.CarRepository;
+import com.example.demo.dto.in.CarIn;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.flywaydb.test.FlywayTestExecutionListener;
 import org.flywaydb.test.annotation.FlywayTest;
@@ -64,7 +64,7 @@ public class CarEntityTests {
     @Test
     public void testCreate() throws Exception {
         String uri = "/car";
-        CarDTO dto = new CarDTO();
+        CarIn dto = new CarIn();
         dto.setModelName("2104");
         dto.setCarName("VAZ");
         dto.setDescription("Четырка");
@@ -95,7 +95,7 @@ public class CarEntityTests {
     @Test
     public void testUpdate() throws Exception {
         String uri = "/car";
-        CarDTO dto = new CarDTO();
+        CarIn dto = new CarIn();
         dto.setId(1);
         dto.setModelName("2106");
         dto.setCarName("VAZ");

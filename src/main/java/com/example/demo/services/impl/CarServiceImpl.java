@@ -1,12 +1,14 @@
 package com.example.demo.services.impl;
 
-import com.example.demo.dto.CarDTO;
 import com.example.demo.db.entities.CarEntity;
 import com.example.demo.db.entities.DriverEntity;
+import com.example.demo.dto.in.CarIn;
+import com.example.demo.dto.out.CarOut;
 import com.example.demo.exceptions.CarDriverApiException;
 import com.example.demo.db.repositories.CarRepository;
 import com.example.demo.db.repositories.DriverRepository;
 import com.example.demo.services.CarService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class CarServiceImpl implements CarService {
 
     private final CarRepository repository;
     private final DriverRepository driverRepository;
+    private final ObjectMapper mapper;
 
     private static final String NO_CAR_MESSAGE = "There is no such car!";
     private static final String DTO_MUST_NOT_BE_NULL_MESSAGE = "DTO must not be null!";
@@ -75,16 +78,16 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public CarDTO toDTO(CarEntity carEntity) {
-        if (carEntity == null) {
-            throw new CarDriverApiException(DTO_MUST_NOT_BE_NULL_MESSAGE);
-        }
-        CarDTO dto = new CarDTO();
-        dto.setCarName(carEntity.getCarName());
-        dto.setModelName(carEntity.getModelName());
-        dto.setDescription(carEntity.getDescription());
-        dto.setDriverId(Optional.ofNullable(carEntity.getDriver()).map(DriverEntity::getId).orElse(null));
-        dto.setId(carEntity.getId());
-        return dto;
+    public CarIn toInDTO(CarEntity carEntity) {
+        return Optional.ofNullable(carEntity)
+                .map(ent -> mapper.convertValue(ent, CarIn.class))
+                .orElseThrow(() -> new CarDriverApiException(DTO_MUST_NOT_BE_NULL_MESSAGE));
+    }
+
+    @Override
+    public CarOut toOutDTO(CarEntity carEntity) {
+        return Optional.ofNullable(carEntity)
+                .map(ent -> mapper.convertValue(ent, CarOut.class))
+                .orElseThrow(() -> new CarDriverApiException(DTO_MUST_NOT_BE_NULL_MESSAGE));
     }
 }

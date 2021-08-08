@@ -1,9 +1,9 @@
-package com.example.demo.dto;
+package com.example.demo.dto.in;
 
 import lombok.Data;
 
 @Data
-public class UserDTO {
+public class UserIn {
     private Integer id;
     private String name;
     private String description;

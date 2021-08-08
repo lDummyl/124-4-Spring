@@ -1,9 +1,9 @@
-package com.example.demo.dto;
+package com.example.demo.dto.in;
 
 import lombok.Data;
 
 @Data
-public class DriverDTO {
+public class DriverIn {
     private Integer id;
     private String firstName;
     private String lastName;

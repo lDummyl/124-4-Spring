@@ -1,6 +1,7 @@
 package com.example.demo.webservices.impl;
 
-import com.example.demo.dto.CarDTO;
+import com.example.demo.dto.in.CarIn;
+import com.example.demo.dto.out.CarOut;
 import com.example.demo.services.impl.CarServiceImpl;
 import com.example.demo.webservices.CarWebService;
 import lombok.RequiredArgsConstructor;
@@ -21,20 +22,20 @@ public class CarWebServiceImpl implements CarWebService {
     private final CarServiceImpl service;
 
     @Override
-    public List<CarDTO> getById(Optional<Integer> id) {
+    public List<CarOut> getById(Optional<Integer> id) {
         return id
                 .map(service::getById)
-                .map(service::toDTO)
+                .map(service::toOutDTO)
                 .map(Collections::singletonList)
                 .orElseGet(() -> service.getAll().stream()
-                        .map(service::toDTO)
+                        .map(service::toOutDTO)
                         .collect(Collectors.toList()));
     }
 
     @Transactional
     @Override
-    public CarDTO create(CarDTO dto) {
-        return service.toDTO(service.create(
+    public CarOut create(CarIn dto) {
+        return service.toOutDTO(service.create(
                 dto.getModelName(),
                 dto.getCarName(),
                 dto.getDescription(),
@@ -44,8 +45,8 @@ public class CarWebServiceImpl implements CarWebService {
 
     @Transactional
     @Override
-    public CarDTO update(CarDTO dto) {
-        return service.toDTO(service.update(
+    public CarOut update(CarIn dto) {
+        return service.toOutDTO(service.update(
                 dto.getId(),
                 dto.getModelName(),
                 dto.getCarName(),

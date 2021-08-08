@@ -1,6 +1,7 @@
 package com.example.demo.web;
 
-import com.example.demo.dto.DriverDTO;
+import com.example.demo.dto.in.DriverIn;
+import com.example.demo.dto.out.DriverOut;
 import com.example.demo.webservices.DriverWebService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,17 +27,17 @@ public class DriverController {
 
     // TODO: 02.08.2021 отдельные методы для 1 и для списка
     @GetMapping(value = {"", "/{id}"})
-    public List<DriverDTO> getById(@PathVariable Optional<Integer> id) {
+    public List<DriverOut> getById(@PathVariable Optional<Integer> id) {
         return service.getById(id);
     }
 
     @PostMapping
-    public DriverDTO create(@RequestBody DriverDTO dto) {
+    public DriverOut create(@RequestBody DriverIn dto) {
         return service.create(dto);
     }
 
     @PutMapping
-    public DriverDTO update(@RequestBody DriverDTO dto) {
+    public DriverOut update(@RequestBody DriverIn dto) {
         return service.update(dto);
     }
 

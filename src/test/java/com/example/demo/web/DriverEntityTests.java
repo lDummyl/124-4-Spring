@@ -1,7 +1,7 @@
 package com.example.demo.web;
 
-import com.example.demo.dto.DriverDTO;
 import com.example.demo.db.repositories.DriverRepository;
+import com.example.demo.dto.in.DriverIn;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.test.FlywayTestExecutionListener;
@@ -66,7 +66,7 @@ public class DriverEntityTests {
     @Test
     public void testCreate() throws Exception {
         String uri = "/driver";
-        DriverDTO dto = new DriverDTO();
+        DriverIn dto = new DriverIn();
         dto.setFirstName("Dmitry");
         dto.setLastName("Medvedev");
         dto.setAge(54);
@@ -96,7 +96,7 @@ public class DriverEntityTests {
     @Test
     public void testUpdate() throws Exception {
         String uri = "/driver";
-        DriverDTO dto = new DriverDTO();
+        DriverIn dto = new DriverIn();
         dto.setId(1);
         dto.setFirstName("Vladimir");
         dto.setLastName("Putin");

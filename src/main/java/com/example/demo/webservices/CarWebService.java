@@ -1,19 +1,20 @@
 package com.example.demo.webservices;
 
-import com.example.demo.dto.CarDTO;
+import com.example.demo.dto.in.CarIn;
+import com.example.demo.dto.out.CarOut;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 public interface CarWebService {
-    List<CarDTO> getById(Optional<Integer> id);
+    List<CarOut> getById(Optional<Integer> id);
 
     @Transactional
-    CarDTO create(CarDTO dto);
+    CarOut create(CarIn dto);
 
     @Transactional
-    CarDTO update(CarDTO dto);
+    CarOut update(CarIn dto);
 
     @Transactional
     void delete(Integer id);

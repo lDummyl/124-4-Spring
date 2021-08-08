@@ -1,7 +1,8 @@
 package com.example.demo.services;
 
 import com.example.demo.db.entities.DriverEntity;
-import com.example.demo.dto.DriverDTO;
+import com.example.demo.dto.in.DriverIn;
+import com.example.demo.dto.out.DriverOut;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -20,5 +21,7 @@ public interface DriverService {
     @Transactional
     DriverEntity update(Integer id, String firstName, String lastName, Integer age);
 
-    DriverDTO toDTO(DriverEntity driverEntity);
+    DriverIn toInDTO(DriverEntity driverEntity);
+
+    DriverOut toOutDTO(DriverEntity driverEntity);
 }

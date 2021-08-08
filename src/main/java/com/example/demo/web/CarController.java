@@ -1,6 +1,7 @@
 package com.example.demo.web;
 
-import com.example.demo.dto.CarDTO;
+import com.example.demo.dto.in.CarIn;
+import com.example.demo.dto.out.CarOut;
 import com.example.demo.webservices.CarWebService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,17 +26,17 @@ public class CarController {
     private final CarWebService service;
 
     @GetMapping(value = {"", "/{id}"})
-    public List<CarDTO> getById(@PathVariable Optional<Integer> id) {
+    public List<CarOut> getById(@PathVariable Optional<Integer> id) {
         return service.getById(id);
     }
 
     @PostMapping
-    public CarDTO create(@RequestBody CarDTO dto) {
+    public CarOut create(@RequestBody CarIn dto) {
         return service.create(dto);
     }
 
     @PutMapping
-    public CarDTO update(@RequestBody CarDTO dto) {
+    public CarOut update(@RequestBody CarIn dto) {
         return service.update(dto);
     }
 

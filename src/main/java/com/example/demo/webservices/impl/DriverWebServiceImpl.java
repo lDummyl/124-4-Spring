@@ -1,6 +1,7 @@
 package com.example.demo.webservices.impl;
 
-import com.example.demo.dto.DriverDTO;
+import com.example.demo.dto.in.DriverIn;
+import com.example.demo.dto.out.DriverOut;
 import com.example.demo.services.impl.DriverServiceImpl;
 import com.example.demo.webservices.DriverWebService;
 import lombok.RequiredArgsConstructor;
@@ -21,20 +22,20 @@ public class DriverWebServiceImpl implements DriverWebService {
     private final DriverServiceImpl service;
 
     @Override
-    public List<DriverDTO> getById(Optional<Integer> id) {
+    public List<DriverOut> getById(Optional<Integer> id) {
         return id
                 .map(service::getById)
-                .map(service::toDTO)
+                .map(service::toOutDTO)
                 .map(Collections::singletonList)
                 .orElseGet(() -> service.getAll().stream()
-                        .map(service::toDTO)
+                        .map(service::toOutDTO)
                         .collect(Collectors.toList()));
     }
 
     @Transactional
     @Override
-    public DriverDTO create(DriverDTO dto) {
-        return service.toDTO(service.create(
+    public DriverOut create(DriverIn dto) {
+        return service.toOutDTO(service.create(
                 dto.getFirstName(),
                 dto.getLastName(),
                 dto.getAge()
@@ -43,8 +44,8 @@ public class DriverWebServiceImpl implements DriverWebService {
 
     @Transactional
     @Override
-    public DriverDTO update(DriverDTO dto) {
-        return service.toDTO(service.update(
+    public DriverOut update(DriverIn dto) {
+        return service.toOutDTO(service.update(
                 dto.getId(),
                 dto.getFirstName(),
                 dto.getLastName(),

@@ -1,10 +1,9 @@
-package com.example.demo.dto;
+package com.example.demo.dto.in;
 
 import lombok.Data;
 
-// TODO: 02.08.2021 input DTO and output DTO
 @Data
-public class CarDTO {
+public class CarIn {
     private Integer id;
     private String modelName;
     private String carName;

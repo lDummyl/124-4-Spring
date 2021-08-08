@@ -1,19 +1,20 @@
 package com.example.demo.webservices;
 
-import com.example.demo.dto.DriverDTO;
+import com.example.demo.dto.in.DriverIn;
+import com.example.demo.dto.out.DriverOut;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 public interface DriverWebService {
-    List<DriverDTO> getById(Optional<Integer> id);
+    List<DriverOut> getById(Optional<Integer> id);
 
     @Transactional
-    DriverDTO create(DriverDTO dto);
+    DriverOut create(DriverIn dto);
 
     @Transactional
-    DriverDTO update(DriverDTO dto);
+    DriverOut update(DriverIn dto);
 
     @Transactional
     void delete(Integer id);
