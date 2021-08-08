@@ -2,7 +2,7 @@ package com.example.demo.webservices.impl;
 
 import com.example.demo.dto.in.CarIn;
 import com.example.demo.dto.out.CarOut;
-import com.example.demo.services.impl.CarServiceImpl;
+import com.example.demo.services.CarService;
 import com.example.demo.webservices.CarWebService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CarWebServiceImpl implements CarWebService {
 
-    private final CarServiceImpl service;
+    private final CarService service;
 
     @Override
     public CarOut getById(Integer id) {

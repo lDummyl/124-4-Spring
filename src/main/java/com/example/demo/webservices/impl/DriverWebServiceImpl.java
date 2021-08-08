@@ -2,7 +2,7 @@ package com.example.demo.webservices.impl;
 
 import com.example.demo.dto.in.DriverIn;
 import com.example.demo.dto.out.DriverOut;
-import com.example.demo.services.impl.DriverServiceImpl;
+import com.example.demo.services.DriverService;
 import com.example.demo.webservices.DriverWebService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DriverWebServiceImpl implements DriverWebService {
 
-    private final DriverServiceImpl service;
+    private final DriverService service;
 
     @Override
     public DriverOut getById(Integer id) {
