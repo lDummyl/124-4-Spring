@@ -1,5 +1,6 @@
 package com.example.demo.web;
 
+import com.example.demo.db.entities.CarEntity;
 import com.example.demo.db.repositories.CarRepository;
 import com.example.demo.dto.in.CarIn;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -74,6 +75,22 @@ public class CarEntityTests {
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("modelName").value("2104"));
+    }
+
+    @Test
+    public void testCreateMoreThenMax() throws Exception {
+        String uri = "/car";
+        CarIn dto = new CarIn();
+        dto.setModelName("2104");
+        dto.setCarName("VAZ");
+        dto.setDescription("Четырка");
+        dto.setDriverId(1);
+        repository.save(objectMapper.convertValue(dto, CarEntity.class));
+        String content = objectMapper.writeValueAsString(dto);
+        mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", Matchers.contains("There is enough cars already!")));
     }
 
     @Test

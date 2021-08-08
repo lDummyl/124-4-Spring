@@ -1,5 +1,6 @@
 package com.example.demo.web;
 
+import com.example.demo.db.entities.DriverEntity;
 import com.example.demo.db.repositories.DriverRepository;
 import com.example.demo.dto.in.DriverIn;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -75,6 +76,21 @@ public class DriverEntityTests {
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("firstName").value("Dmitry"));
+    }
+
+    @Test
+    public void testCreateMoreThenMax() throws Exception {
+        String uri = "/driver";
+        DriverIn dto = new DriverIn();
+        dto.setFirstName("Dmitry");
+        dto.setLastName("Medvedev");
+        dto.setAge(54);
+        repository.save(objectMapper.convertValue(dto, DriverEntity.class));
+        String content = objectMapper.writeValueAsString(dto);
+        mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", Matchers.contains("There is enough drivers already!")));
     }
 
     @Test

@@ -18,3 +18,5 @@ spring:
     enabled: true
 server:
   port: 8081
+maxCars: 5
+maxDrivers: 5

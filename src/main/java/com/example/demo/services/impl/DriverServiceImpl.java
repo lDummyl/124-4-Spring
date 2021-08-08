@@ -9,6 +9,7 @@ import com.example.demo.services.DriverService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,11 +25,18 @@ public class DriverServiceImpl implements DriverService {
     private final ObjectMapper mapper;
 
     private static final String NO_DRIVER_MESSAGE = "There is no such driver!";
+    private static final String MAX_COUNT_REACHED = "There is enough drivers already!";
     private static final String DTO_MUST_NOT_BE_NULL_MESSAGE = "DTO must not be null!";
+
+    @Value("${maxDrivers:0}")
+    private Integer maxDrivers;
 
     @Transactional
     @Override
     public DriverEntity create(String firstName, String lastName, Integer age) {
+        if (maxDrivers > 0 && repository.count() >= maxDrivers) {
+            throw new CarDriverApiException(MAX_COUNT_REACHED);
+        }
         DriverEntity driverEntity = new DriverEntity();
         driverEntity.setFirstName(firstName);
         driverEntity.setLastName(lastName);

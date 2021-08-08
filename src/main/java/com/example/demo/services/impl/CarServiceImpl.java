@@ -11,6 +11,7 @@ import com.example.demo.services.CarService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,11 +28,18 @@ public class CarServiceImpl implements CarService {
     private final ObjectMapper mapper;
 
     private static final String NO_CAR_MESSAGE = "There is no such car!";
+    private static final String MAX_COUNT_REACHED = "There is enough cars already!";
     private static final String DTO_MUST_NOT_BE_NULL_MESSAGE = "DTO must not be null!";
+
+    @Value("${maxCars:0}")
+    private Integer maxCars;
 
     @Transactional
     @Override
     public CarEntity create(String modelName, String carName, String description, Integer driverId) {
+        if (maxCars > 0 && repository.count() >= maxCars) {
+            throw new CarDriverApiException(MAX_COUNT_REACHED);
+        }
         CarEntity carEntity = new CarEntity();
         carEntity.setModelName(modelName);
         carEntity.setCarName(carName);
