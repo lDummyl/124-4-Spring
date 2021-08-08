@@ -1,16 +1,15 @@
 package com.example.demo.services.impl;
 
 import com.example.demo.db.entities.DriverEntity;
+import com.example.demo.db.repositories.DriverRepository;
 import com.example.demo.dto.in.DriverIn;
 import com.example.demo.dto.out.DriverOut;
 import com.example.demo.exceptions.CarDriverApiException;
-import com.example.demo.db.repositories.DriverRepository;
 import com.example.demo.services.DriverService;
 import com.example.demo.utils.EventLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
