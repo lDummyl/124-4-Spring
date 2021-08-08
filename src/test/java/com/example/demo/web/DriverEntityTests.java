@@ -79,21 +79,6 @@ public class DriverEntityTests {
     }
 
     @Test
-    public void testCreateMoreThenMax() throws Exception {
-        String uri = "/driver";
-        DriverIn dto = new DriverIn();
-        dto.setFirstName("Dmitry");
-        dto.setLastName("Medvedev");
-        dto.setAge(54);
-        repository.save(objectMapper.convertValue(dto, DriverEntity.class));
-        String content = objectMapper.writeValueAsString(dto);
-        mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
-                .andDo(document(uri.replace("/", "\\")))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("errors", Matchers.contains("There is enough drivers already!")));
-    }
-
-    @Test
     public void testGetById() throws Exception {
         String uri = "/driver/{id}";
         mockMvc.perform(get(uri, 1).contentType(MediaType.APPLICATION_JSON))
@@ -152,5 +137,20 @@ public class DriverEntityTests {
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("errors", Matchers.contains("There is no such driver!")));
+    }
+
+    @Test
+    public void whenCreateMoreThenMax_thenBadRequest() throws Exception {
+        String uri = "/driver";
+        DriverIn dto = new DriverIn();
+        dto.setFirstName("Dmitry");
+        dto.setLastName("Medvedev");
+        dto.setAge(54);
+        repository.save(objectMapper.convertValue(dto, DriverEntity.class));
+        String content = objectMapper.writeValueAsString(dto);
+        mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", Matchers.contains("There are enough drivers already!")));
     }
 }

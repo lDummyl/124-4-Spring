@@ -25,7 +25,7 @@ public class DriverServiceImpl implements DriverService {
     private final ObjectMapper mapper;
 
     private static final String NO_DRIVER_MESSAGE = "There is no such driver!";
-    private static final String MAX_COUNT_REACHED = "There is enough drivers already!";
+    private static final String MAX_COUNT_REACHED = "There are enough drivers already!";
     private static final String DTO_MUST_NOT_BE_NULL_MESSAGE = "DTO must not be null!";
 
     @Value("${maxDrivers:0}")

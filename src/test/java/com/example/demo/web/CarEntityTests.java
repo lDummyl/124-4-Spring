@@ -78,22 +78,6 @@ public class CarEntityTests {
     }
 
     @Test
-    public void testCreateMoreThenMax() throws Exception {
-        String uri = "/car";
-        CarIn dto = new CarIn();
-        dto.setModelName("2104");
-        dto.setCarName("VAZ");
-        dto.setDescription("Четырка");
-        dto.setDriverId(1);
-        repository.save(objectMapper.convertValue(dto, CarEntity.class));
-        String content = objectMapper.writeValueAsString(dto);
-        mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
-                .andDo(document(uri.replace("/", "\\")))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("errors", Matchers.contains("There is enough cars already!")));
-    }
-
-    @Test
     public void testGetById() throws Exception {
         String uri = "/car/{id}";
         mockMvc.perform(get(uri, 1).contentType(MediaType.APPLICATION_JSON))
@@ -153,5 +137,21 @@ public class CarEntityTests {
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("errors", Matchers.contains("There is no such car!")));
+    }
+
+    @Test
+    public void whenCreateMoreThenMax_thenBadRequest() throws Exception {
+        String uri = "/car";
+        CarIn dto = new CarIn();
+        dto.setModelName("2104");
+        dto.setCarName("VAZ");
+        dto.setDescription("Четырка");
+        dto.setDriverId(1);
+        repository.save(objectMapper.convertValue(dto, CarEntity.class));
+        String content = objectMapper.writeValueAsString(dto);
+        mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", Matchers.contains("There are enough cars already!")));
     }
 }

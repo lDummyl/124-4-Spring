@@ -28,7 +28,7 @@ public class CarServiceImpl implements CarService {
     private final ObjectMapper mapper;
 
     private static final String NO_CAR_MESSAGE = "There is no such car!";
-    private static final String MAX_COUNT_REACHED = "There is enough cars already!";
+    private static final String MAX_COUNT_REACHED = "There are enough cars already!";
     private static final String DTO_MUST_NOT_BE_NULL_MESSAGE = "DTO must not be null!";
 
     @Value("${maxCars:0}")
