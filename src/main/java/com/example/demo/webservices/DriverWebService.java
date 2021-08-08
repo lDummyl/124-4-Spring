@@ -5,10 +5,11 @@ import com.example.demo.dto.out.DriverOut;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 public interface DriverWebService {
-    List<DriverOut> getById(Optional<Integer> id);
+    DriverOut getById(Integer id);
+
+    List<DriverOut> getAll();
 
     @Transactional
     DriverOut create(DriverIn dto);

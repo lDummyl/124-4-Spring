@@ -87,7 +87,7 @@ public class DriverEntityTests {
 
     @Test
     public void testGetAll() throws Exception {
-        String uri = "/driver";
+        String uri = "/driver/all";
         mockMvc.perform(get(uri).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
@@ -125,7 +125,7 @@ public class DriverEntityTests {
         mockMvc.perform(get(uri, "blah-de-blah").contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("errors", Matchers.contains("id should be of type java.util.Optional")));
+                .andExpect(jsonPath("errors", Matchers.contains("id should be of type java.lang.Integer")));
     }
 
     @Test

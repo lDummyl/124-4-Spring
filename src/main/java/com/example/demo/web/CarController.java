@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -25,8 +24,13 @@ public class CarController {
 
     private final CarWebService service;
 
-    @GetMapping(value = {"", "/{id}"})
-    public List<CarOut> getById(@PathVariable Optional<Integer> id) {
+    @GetMapping("/all")
+    public List<CarOut> getAll() {
+        return service.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public CarOut getById(@PathVariable Integer id) {
         return service.getById(id);
     }
 

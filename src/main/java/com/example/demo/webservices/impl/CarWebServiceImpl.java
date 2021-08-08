@@ -9,9 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,14 +20,15 @@ public class CarWebServiceImpl implements CarWebService {
     private final CarServiceImpl service;
 
     @Override
-    public List<CarOut> getById(Optional<Integer> id) {
-        return id
-                .map(service::getById)
+    public CarOut getById(Integer id) {
+        return service.toOutDTO(service.getById(id));
+    }
+
+    @Override
+    public List<CarOut> getAll() {
+        return service.getAll().stream()
                 .map(service::toOutDTO)
-                .map(Collections::singletonList)
-                .orElseGet(() -> service.getAll().stream()
-                        .map(service::toOutDTO)
-                        .collect(Collectors.toList()));
+                .collect(Collectors.toList());
     }
 
     @Transactional

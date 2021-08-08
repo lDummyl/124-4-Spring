@@ -5,10 +5,11 @@ import com.example.demo.dto.out.CarOut;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 public interface CarWebService {
-    List<CarOut> getById(Optional<Integer> id);
+    CarOut getById(Integer id);
+
+    List<CarOut> getAll();
 
     @Transactional
     CarOut create(CarIn dto);

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -25,9 +24,13 @@ public class DriverController {
 
     private final DriverWebService service;
 
-    // TODO: 02.08.2021 отдельные методы для 1 и для списка
-    @GetMapping(value = {"", "/{id}"})
-    public List<DriverOut> getById(@PathVariable Optional<Integer> id) {
+    @GetMapping("/all")
+    public List<DriverOut> getAll() {
+        return service.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public DriverOut getById(@PathVariable Integer id) {
         return service.getById(id);
     }
 

@@ -86,7 +86,7 @@ public class CarEntityTests {
 
     @Test
     public void testGetAll() throws Exception {
-        String uri = "/car";
+        String uri = "/car/all";
         mockMvc.perform(get(uri).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
@@ -125,7 +125,7 @@ public class CarEntityTests {
         mockMvc.perform(get(uri, "blah-de-blah").contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("errors", Matchers.contains("id should be of type java.util.Optional")));
+                .andExpect(jsonPath("errors", Matchers.contains("id should be of type java.lang.Integer")));
     }
 
     @Test
