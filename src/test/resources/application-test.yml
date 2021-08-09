@@ -11,11 +11,6 @@ spring:
   sql:
     init:
       mode: always
-  flyway:
-    url: ${spring.datasource.url}
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
-    enabled: true
 server:
   port: 8081
 maxCars: 5
