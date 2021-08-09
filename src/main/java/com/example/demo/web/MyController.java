@@ -4,10 +4,8 @@ import com.example.demo.dto.UserDetails;
 import com.example.demo.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -35,4 +33,12 @@ public class MyController {
         userService.add(userDetails);
         return "Ok!";
     }
+
+    @GetMapping
+    @RequestMapping("/simplehtml")
+    public String sayHtmll() {
+        return   "<html>\n" + "<header><title>Welcome</title></header>\n" +
+                "<body>\n" + "Hello world\n" + "</body>\n" + "</html>";
+    }
+
 }
