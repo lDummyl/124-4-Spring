@@ -55,6 +55,7 @@ public class CarEntityTests {
 
     @Before
     @FlywayTest
+    // TODO: 09.08.2021 возможно, стоит создавать энтити для базы программно, а не через Flyway
     public void setUp() {
         this.mockMvc =
                 MockMvcBuilders.webAppContextSetup(this.webApplicationContext)
@@ -147,6 +148,7 @@ public class CarEntityTests {
         dto.setCarName("VAZ");
         dto.setDescription("Четырка");
         dto.setDriverId(1);
+        // TODO: 09.08.2021 посчитать сколько сейчас, добавить/удалить ровно до лимита
         repository.save(objectMapper.convertValue(dto, CarEntity.class));
         String content = objectMapper.writeValueAsString(dto);
         mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
