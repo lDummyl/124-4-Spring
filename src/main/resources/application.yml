@@ -18,6 +18,10 @@ spring:
   sql:
     init:
       mode: always
+  freemarker:
+    suffix: .ftlh
+    settings:
+      recognize_standard_file_extensions: true
 springdoc:
   swagger-ui:
     disable-swagger-default-url: true

@@ -1,8 +1,9 @@
 package com.example.demo.db.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -13,9 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity(name = "CAR")
-@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
-@ToString
+@Getter
 public class CarEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
