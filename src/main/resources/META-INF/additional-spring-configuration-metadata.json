@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "maxDrivers",
+      "type": "java.lang.String",
+      "description": "Maximal quantity of drivers in database."
+    },
+    {
+      "name": "maxCars",
+      "type": "java.lang.String",
+      "description": "Maximal quantity of cars in database."
+    }
+  ]
+}
