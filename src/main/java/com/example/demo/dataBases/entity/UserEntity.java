@@ -1,4 +1,4 @@
-package com.example.demo.db.ent;
+package com.example.demo.dataBases.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -7,16 +7,17 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
+@NoArgsConstructor
 @Table(schema = "public")
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String superName;
+    private Integer yearOfBirth;
+
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL)
