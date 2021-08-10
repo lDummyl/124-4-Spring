@@ -7,6 +7,7 @@
 </head>
 
 <body>
+<div><a href="/swagger-ui/index.html?url=/v3/api-docs">Swagger</a></div>
 <div><a href="/cars">Show cars</a></div>
 <div><a href="/drivers">Show drivers</a></div>
 <div><a href="/fillTestData">Fill test data</a></div>
