@@ -21,8 +21,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
+//@SpringBootTest
+//@RunWith(SpringRunner.class)
 public class AdminControllerTest {
 
     MockMvc mockMvc;
@@ -36,7 +36,7 @@ public class AdminControllerTest {
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
 
-    @Before
+    //@Before
     public void setUp() {
         ConfigurableMockMvcBuilder builder =
                 MockMvcBuilders.webAppContextSetup(this.webApplicationContext)
@@ -44,7 +44,7 @@ public class AdminControllerTest {
         this.mockMvc = builder.build();
     }
 
-    @Test
+    //@Test
     public void testInit() throws Exception {
         String uri = "/users/{id}";
         mockMvc.perform(get(uri, 99)

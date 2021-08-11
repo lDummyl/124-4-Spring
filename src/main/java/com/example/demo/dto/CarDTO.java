@@ -14,7 +14,6 @@ public class CarDTO {
     private String model;
 
     //TODO расширить модель для БД many-to-many, one-to-one, one-to-many
-
     //TODO затолкать в БД
 
 }

@@ -34,8 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class CarControllerTest {
 
-    //TODO добавить тесты на exception
-
     MockMvc mockMvc;
     String URI_CONTROLLER = "/cars";
 
@@ -85,7 +83,6 @@ public class CarControllerTest {
 
     private void clearTestData() {
         for (CarDTO delCar : carService.getAll()) {
-            System.out.println(delCar.toString());
             carService.delete(delCar.getId());
         }
     }
@@ -152,6 +149,7 @@ public class CarControllerTest {
         boolean res = carService.getAll().stream()
                 .filter(c -> c.getModel().equals(testNewCar.getModel()))
                 .anyMatch(c -> c.getBrand().equals(testNewCar.getBrand()));
+
         Assert.assertTrue(res);
     }
 
@@ -167,15 +165,6 @@ public class CarControllerTest {
                         .content(objectMapper.writeValueAsString(testCar1)))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
-
-        System.out.println("send object");
-        System.out.println(testCar1.toString());
-        System.out.println("beg get objects");
-        System.out.println(carService.getAll().toString());
-        for (CarDTO car : carService.getAll()) {
-            System.out.println(car.toString());
-        }
-        System.out.println("end get objects");
 
         Assert.assertTrue(carService.getAll().contains(testCar1));
     }
