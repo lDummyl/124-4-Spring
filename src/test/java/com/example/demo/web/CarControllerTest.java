@@ -1,8 +1,11 @@
 package com.example.demo.web;
 
 import com.example.demo.dto.CarDTO;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.services.CarService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,9 +20,9 @@ import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -63,6 +66,8 @@ public class CarControllerTest {
 
     private void initTestData() {
         //TODO: С подключение БД перенести в init.sql и отказаться от carService
+        clearTestData();
+
         testCar1 = new CarDTO();
         testCar1.setId(101L);
         testCar1.setBrand("bmw");
@@ -77,6 +82,14 @@ public class CarControllerTest {
 
         carSet = carService.getAll();
     }
+
+    private void clearTestData() {
+        for (CarDTO delCar : carService.getAll()) {
+            System.out.println(delCar.toString());
+            carService.delete(delCar.getId());
+        }
+    }
+
 
     @Test
     public void readAll_get_all_jsonSet_succ() throws Exception {
@@ -94,50 +107,76 @@ public class CarControllerTest {
     }
 
     @Test
-    public void read() {
-        //TODO: добавить тест
+    public void read_car_by_id_succ() throws Exception {
+        Long id = testCar1.getId();
+        String uri = URI_CONTROLLER + "/" + id;
+
+        mockMvc.perform(get(uri).accept(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString().equals(objectMapper.writeValueAsString(testCar1));
     }
 
     @Test
-    public void create_new_car_by_post_jsondto_succ() throws Exception {
+    public void read_car_by_id_fail() throws Exception {
+        Long id = testCar1.getId();
+        String uri = URI_CONTROLLER + "/" + id;
+
+        clearTestData();
+
+        mockMvc.perform(get(uri).accept(MediaType.APPLICATION_JSON))
+                .andDo(document(uri.replace("/", "\\")))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotFoundException))
+                .andExpect(result -> assertEquals(Objects.requireNonNull(result.getResolvedException()).getMessage(), "Could not find data by " + id));
+    }
+
+    @Test
+    public void add_new_car_by_post_jsondto_succ() throws Exception {
         String uri = URI_CONTROLLER;
-        Long id = 1L;
 
-        //TODO переделать на сервис
-        CarDTO carDTO = new CarDTO();
-        carDTO.setId(id);
-        carDTO.setBrand("nissan");
-        carDTO.setModel("leaf");
+        clearTestData();
 
-        mockMvc.perform(post(uri, id)
+        CarDTO testNewCar = new CarDTO();
+        testNewCar.setBrand("sizuki");
+        testNewCar.setModel("sx-4");
+
+        mockMvc.perform(post(uri)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(carDTO)))
+                        .content(objectMapper.writeValueAsString(testNewCar)))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
+
+        boolean res = carService.getAll().stream()
+                .filter(c -> c.getModel().equals(testNewCar.getModel()))
+                .anyMatch(c -> c.getBrand().equals(testNewCar.getBrand()));
+        Assert.assertTrue(res);
     }
 
     @Test
     public void update_car_by_id_and_jsondto() throws Exception {
-        String uri = URI_CONTROLLER + "/{id}";
-        Long id = 2L;
-        //TODO переделать на сервис
-        CarDTO carDTO = new CarDTO();
-        carDTO.setId(id);
-        carDTO.setBrand("opel");
-        carDTO.setModel("astra");
+        Long id = testCar1.getId();
+        String uri = URI_CONTROLLER + "/" + id;
 
-        mockMvc.perform(post(uri, id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(carDTO)))
-                .andDo(document(uri.replace("/", "\\")))
-                .andExpect(status().isOk());
-
-        carDTO.setModel("mokka");
+        testCar1.setModel("mokka");
 
         mockMvc.perform(put(uri, id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(carDTO)))
+                        .content(objectMapper.writeValueAsString(testCar1)))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
+
+        System.out.println("send object");
+        System.out.println(testCar1.toString());
+        System.out.println("beg get objects");
+        System.out.println(carService.getAll().toString());
+        for (CarDTO car : carService.getAll()) {
+            System.out.println(car.toString());
+        }
+        System.out.println("end get objects");
+
+        Assert.assertTrue(carService.getAll().contains(testCar1));
     }
 }
