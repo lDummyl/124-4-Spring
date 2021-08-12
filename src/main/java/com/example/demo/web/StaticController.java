@@ -10,7 +10,6 @@ import com.example.demo.webservices.CarWebService;
 import com.example.demo.webservices.DriverWebService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
