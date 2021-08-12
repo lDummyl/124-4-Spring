@@ -29,7 +29,7 @@ public class StaticController {
     private final DriverRepository driverRepository;
 
     @GetMapping("/index")
-    public String index(Model model) {
+    public String index() {
         return "index";
     }
 
