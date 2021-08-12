@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -62,5 +63,10 @@ public class CarService {
         else {
             updatingCar(carDetails.getId(), carDetails.getModel());
         }
+    }
+
+    public List<CarEntity> getByModel(String model){
+
+        return carRepository.findByModel(model);
     }
 }

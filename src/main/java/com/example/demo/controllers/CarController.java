@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,10 +18,16 @@ public class CarController {
 
     private final CarService carService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public Optional<CarEntity> getCar(@PathVariable Long id){
         return carService.getCar(id);
     }
+
+    @GetMapping("/model/{model}")
+    public List<CarEntity> getByModel(@PathVariable String model){
+        return carService.getByModel(model);
+    }
+
 
     @GetMapping("/getAllCars")
     public List<CarEntity> getAllCars(){

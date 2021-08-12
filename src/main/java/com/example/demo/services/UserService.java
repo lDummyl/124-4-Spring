@@ -11,9 +11,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Slf4j
@@ -21,6 +23,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService {
 
+    PageRequest pageable;
     private final UserRepo userRepo;
     private final CarRepository carRepository;
     private final ObjectMapper objectMapper;
@@ -35,11 +38,6 @@ public class UserService {
             CarEntity carEntity = carRepository.findById(carId).orElse(null);
             userEntity.setCarEntityList(Arrays.asList(carEntity));
 
-//            userRepo.save(userEntity);
-//        List<UserEntity> all = userRepo.findAll();
-//        for (UserEntity entity : all) {
-//            log.info(objectMapper.writeValueAsString(entity));
-//        }
             return userRepo.save(userEntity);
         }
 
@@ -74,5 +72,11 @@ public class UserService {
         public Optional<UserEntity> getUser(Long id) {
         return userRepo.findById(id);
     }
+
+    public List<UserEntity> findByName(String name){
+        PageRequest firstPageWithTwoElements = PageRequest.of(0,2, Sort.by("superName"));
+        return userRepo.findBySuperName(name, firstPageWithTwoElements);
+    }
+
 }
 
