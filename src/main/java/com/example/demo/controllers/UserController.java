@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.dataBases.entity.UserEntity;
 //import com.example.demo.dataBases.entity.UserEntity;
 import com.example.demo.dto.UserDetails;
+import com.example.demo.init.Initialisation;
 import com.example.demo.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,41 +20,47 @@ import java.util.Optional;
 @RequestMapping("/user")
 public class UserController {
 
-   private final UserService userService;
-   PageRequest pageRequest;
+    private final Initialisation initialisation;
+    private final UserService userService;
+    PageRequest pageRequest;
 
-   @GetMapping("/id/{id}")
-   public Optional<UserEntity> getUser(@PathVariable Long id){
-       return userService.getUser(id);
-   }
+    @GetMapping("/id/{id}")
+    public Optional<UserEntity> getUser(@PathVariable Long id) {
+        return userService.getUser(id);
+    }
 
     @GetMapping("/userName/{name}")
     public List<UserEntity> findByName(@PathVariable Optional<String> name,
-                                       @PathVariable Optional<String> page){
+                                       @PathVariable Optional<String> page) {
         return userService.findByName(name.orElse(""));
     }
 
-
     @GetMapping("/getAllUsers")
-    public List<UserEntity> getAllUser(){
+    public List<UserEntity> getAllUser() {
         return userService.getAll();
     }
 
-    @PostMapping("/addUser")
-    public String addingUser(@RequestBody UserDetails userDetails){
-       userService.create(userDetails);
-       return "Ok";
-   }
+    @GetMapping("/initUser")
+    public String initUser() {
+        initialisation.userInit();
+        return "ok";
+    }
 
-   @DeleteMapping("/delete/{id}")
-    public String deletingUser(@PathVariable Long id){
+    @PostMapping("/addUser")
+    public String addingUser(@RequestBody UserDetails userDetails) {
+        userService.create(userDetails);
+        return "Ok";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deletingUser(@PathVariable Long id) {
         userService.remove(id);
         return "ok";
-   }
+    }
 
-   @PutMapping("/updateUser/{id}")
-    public String updatingUser(@PathVariable Long id, @RequestBody UserDetails userDetails){
+    @PutMapping("/updateUser/{id}")
+    public String updatingUser(@PathVariable Long id, @RequestBody UserDetails userDetails) {
         userService.getUpdate(id, userDetails);
         return "ok";
-   }
+    }
 }

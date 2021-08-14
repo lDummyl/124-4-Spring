@@ -13,7 +13,7 @@ import java.util.List;
 public interface UserRepo extends JpaRepository<UserEntity, Long> {
 
 
-   @Query("SELECT a FROM UserEntity a WHERE a.superName like %?1%")
-   List<UserEntity> findBySuperName(String name, PageRequest pageable);
+    @Query("SELECT a FROM UserEntity a WHERE a.superName like %?1%")
+    List<UserEntity> findBySuperName(String name, PageRequest pageable);
 
 }
