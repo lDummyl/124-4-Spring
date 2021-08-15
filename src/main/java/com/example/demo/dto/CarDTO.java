@@ -10,10 +10,12 @@ public class CarDTO {
 
     private Integer id;
     private String model;
-    private List<DriverDTO> drivers;
+    private List<GarageDTO> garages;
 
     public void update(CarDTO carDTO){
-        this.model = carDTO.getModel();
-        this.drivers = carDTO.getDrivers();
+        if(carDTO.getModel() != null)
+            this.model = carDTO.getModel();
+        if(carDTO.getGarages() != null)
+            this.garages = carDTO.getGarages();
     }
 }

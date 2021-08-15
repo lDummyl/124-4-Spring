@@ -7,3 +7,5 @@ spring:
     url: "jdbc:postgresql://localhost:5432/mydb_one"
     username: postgres
     password: 123
+values:
+  max_number: 10

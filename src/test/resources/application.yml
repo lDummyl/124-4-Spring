@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  database: h2
+  console: true
+  path: /h2
+datasource:
+  platform: h2
+  url: jdbc:h2:mem:testdb
+  username: sa
+  password: 1234
+  driverClassName: org.h2.Driver
+values:
+  max_number: 10

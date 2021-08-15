@@ -1,5 +1,6 @@
 package com.example.demo.web;
 
+import com.example.demo.DemoApplication;
 import com.example.demo.converters.Converter;
 import com.example.demo.dto.CarDTO;
 import com.example.demo.exceptions.CarDriverException;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebM
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder;
@@ -34,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureWebMvc
+@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 public class CarControllerTest {
 
@@ -79,12 +82,12 @@ public class CarControllerTest {
         carDTO1 = new CarDTO();
         carDTO1.setModel("Hyundai Solaris");
         carDTO1.setId(1);
-        carDTO1.setDrivers(new ArrayList<>());
+        carDTO1.setGarages(new ArrayList<>());
 
         carDTO2 = new CarDTO();
         carDTO2.setModel("Volkswagen Polo");
         carDTO2.setId(2);
-        carDTO2.setDrivers(new ArrayList<>());
+        carDTO2.setGarages(new ArrayList<>());
         list.add(carDTO1);
         list.add(carDTO2);
         carService.saveAll(list);
@@ -98,6 +101,7 @@ public class CarControllerTest {
         mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON)
                 .content(objectWriter.writeValueAsString(carDTO1)))
                 .andDo(document("." + uri))
+                .andExpect(jsonPath("id").value(3))
                 .andExpect(jsonPath("model").value("Hyundai Solaris"))
                 .andExpect(status().isOk());
     }
@@ -148,7 +152,6 @@ public class CarControllerTest {
 
         mockMvc.perform(delete(uri).contentType(MediaType.APPLICATION_JSON))
                 .andDo(document("." + uri))
-                .andExpect(jsonPath("id").value(2))
                 .andExpect(status().isOk());
     }
 

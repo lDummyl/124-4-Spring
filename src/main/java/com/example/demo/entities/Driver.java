@@ -3,6 +3,8 @@ package com.example.demo.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Calendar;
+import java.util.List;
 
 @Data
 @Entity
@@ -14,9 +16,14 @@ public class Driver {
     private String name;
     private String surname;
     private String phone;
-    private Integer age;
+
+    @Temporal(TemporalType.DATE)
+    private Calendar birthDate;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Car> cars;
 
 }

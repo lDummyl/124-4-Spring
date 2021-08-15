@@ -15,7 +15,7 @@ public class Car {
 
     private String model;
 
-    @OneToMany()
-    private List<Driver> drivers;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Garage> garages;
 
 }
