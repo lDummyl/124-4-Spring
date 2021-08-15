@@ -1,8 +1,6 @@
 package com.example.demo.dataBases.entity;
 
 import lombok.*;
-import org.hibernate.procedure.spi.ParameterRegistrationImplementor;
-
 import javax.persistence.*;
 
 @Getter

@@ -11,4 +11,3 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: user
     password: password
-carsCount=3:
