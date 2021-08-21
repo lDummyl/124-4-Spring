@@ -11,3 +11,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: user
     password: password
+springdoc:
+  api-docs:
+    path: api-docs
+

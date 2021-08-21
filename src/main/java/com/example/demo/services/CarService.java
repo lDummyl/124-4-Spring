@@ -46,7 +46,7 @@ public class CarService {
     }
 
     public CarEntity updatingCar(Long id, String model) {
-        CarEntity carEntity = carRepository.findById(id).orElse(new CarEntity());
+        CarEntity carEntity = carRepository.findById(id).orElseThrow(()-> new RuntimeException("No car to modify"));
         carEntity.setId(id);
         carEntity.setModel(model);
         return carRepository.save(carEntity);

@@ -102,7 +102,7 @@ public class CarControllerTest {
         carDetails.setModel("VW");
         carDetails.setId(1L);
         String content = objectMapper.writeValueAsString(carDetails);
-        mockMvc.perform(get(uri).contentType(MediaType.APPLICATION_JSON).content(content))
+        mockMvc.perform(post(uri).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(document(uri.replace("/", "\\")))
                 .andExpect(status().isOk());
 

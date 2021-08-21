@@ -36,7 +36,7 @@ public class CarController {
         return carService.getAllCars();
     }
 
-    @GetMapping("/initCar")
+    @PostMapping("/initCar")
     public String initCar() {
         initialisation.carInit();
         return "ok";
