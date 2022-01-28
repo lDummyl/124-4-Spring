@@ -5,29 +5,49 @@ import com.example.demo.db.ent.CarEntity;
 import com.example.demo.db.ent.UserEntity;
 import com.example.demo.db.repo.UserRepo;
 import com.example.demo.dto.UserDetails;
+import com.example.demo.ex.AwesomeServiceException;
+import com.example.demo.ex.TypicalError;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
+
 public class UserService {
 
     private final UserRepo userRepo;
-
-
     private final ObjectMapper objectMapper;
+    private final SuperService superService;
+
+    @Autowired
+    private AnnotatedBean annotatedBean;
+
+    @Value("${age}")
+    private Integer minDriverAge;
+
+    public UserService(UserRepo userRepo, ObjectMapper objectMapper, SuperService superService) {
+        this.userRepo = userRepo;
+        this.objectMapper = objectMapper;
+        this.superService = superService;
+        System.out.println("minDriverAge = " + minDriverAge);
+    }
+    {
+        System.out.println("minDriverAge = " + minDriverAge);
+    }
+
 
     @SneakyThrows
     @PostConstruct
     public void init(){
+        System.out.println("minDriverAge = " + minDriverAge);
+        System.out.println("superService = " + superService);
         UserEntity userEntity = new UserEntity();
         CarEntity carEntity = new CarEntity();
         carEntity.setModel("Lada");
@@ -50,5 +70,14 @@ public class UserService {
 
     public void add(UserDetails userDetails) {
         throw new RuntimeException("Not impl");
+    }
+
+    public UserDetails getUser(Integer id) {
+        Optional<UserEntity> byId = userRepo.findById(id.longValue());
+        UserEntity user = byId.orElseThrow(() -> new AwesomeServiceException("Ooops", TypicalError.NOT_FOUND));
+        UserDetails userDetails = new UserDetails();
+        userDetails.setId(user.getId().intValue());
+        userDetails.setName(user.getSuperName());
+        return userDetails;
     }
 }

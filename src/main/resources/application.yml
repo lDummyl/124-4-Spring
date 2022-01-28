@@ -11,3 +11,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/garage
     username: postgres
     password: postgres
+
+age: 18
+
+

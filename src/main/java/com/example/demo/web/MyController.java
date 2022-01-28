@@ -18,8 +18,8 @@ public class MyController {
 
 
     @GetMapping("/{id}")
-    public String getSomeData(@PathVariable Integer id) {
-        return "Hello # " + id;
+    public UserDetails getSomeData(@PathVariable Integer id){
+        return userService.getUser(id);
     }
 
     @GetMapping("/all")
@@ -37,7 +37,7 @@ public class MyController {
     @GetMapping
     @RequestMapping("/simplehtml")
     public String sayHtmll() {
-        return   "<html>\n" + "<header><title>Welcome</title></header>\n" +
+        return "<html>\n" + "<header><title>Welcome</title></header>\n" +
                 "<body>\n" + "Hello world\n" + "</body>\n" + "</html>";
     }
 
