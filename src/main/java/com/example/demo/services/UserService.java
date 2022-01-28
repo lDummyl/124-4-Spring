@@ -12,7 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -20,26 +21,24 @@ import java.util.*;
 public class UserService {
 
     private final UserRepo userRepo;
+
+
     private final ObjectMapper objectMapper;
 
     @SneakyThrows
     @PostConstruct
     public void init(){
         UserEntity userEntity = new UserEntity();
-        userEntity.setSuperName("Oleg!");
-
         CarEntity carEntity = new CarEntity();
         carEntity.setModel("Lada");
-
         userEntity.setCarEntityList(Arrays.asList(carEntity));
-
         userRepo.save(userEntity);
-
         List<UserEntity> all = userRepo.findAll();
         for (UserEntity entity : all) {
             log.info(objectMapper.writeValueAsString(entity));
         }
-
+        List<UserEntity> masha = userRepo.findBySuperName("Masha");
+        System.out.println(masha.size());
     }
 
 

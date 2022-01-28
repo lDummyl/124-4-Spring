@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+
 @Configuration
 public class WebMvcAutoConfiguration {
 
@@ -17,4 +18,5 @@ public class WebMvcAutoConfiguration {
         resolver.setSuffix(".jsp");
         return resolver;
     }
+
 }

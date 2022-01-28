@@ -2,6 +2,7 @@ package com.example.demo.db.ent;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class UserEntity {
     private String superName;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch =  FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private List<CarEntity> carEntityList;
 
