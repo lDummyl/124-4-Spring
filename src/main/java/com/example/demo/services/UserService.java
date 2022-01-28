@@ -7,6 +7,7 @@ import com.example.demo.db.repo.UserRepo;
 import com.example.demo.dto.UserDetails;
 import com.example.demo.ex.AwesomeServiceException;
 import com.example.demo.ex.TypicalError;
+import com.example.demo.web.MyClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -19,12 +20,12 @@ import java.util.*;
 
 @Slf4j
 @Service
-
 public class UserService {
 
     private final UserRepo userRepo;
     private final ObjectMapper objectMapper;
     private final SuperService superService;
+    private final MyClient myClient;
 
     @Autowired
     private AnnotatedBean annotatedBean;
@@ -32,12 +33,18 @@ public class UserService {
     @Value("${age}")
     private Integer minDriverAge;
 
-    public UserService(UserRepo userRepo, ObjectMapper objectMapper, SuperService superService) {
+    public UserService(UserRepo userRepo,
+                       ObjectMapper objectMapper,
+                       SuperService superService,
+                       MyClient myClient) {
         this.userRepo = userRepo;
         this.objectMapper = objectMapper;
         this.superService = superService;
+        this.myClient = myClient;
         System.out.println("minDriverAge = " + minDriverAge);
     }
+
+
     {
         System.out.println("minDriverAge = " + minDriverAge);
     }
@@ -46,6 +53,7 @@ public class UserService {
     @SneakyThrows
     @PostConstruct
     public void init(){
+        String hello = myClient.getHello();
         System.out.println("minDriverAge = " + minDriverAge);
         System.out.println("superService = " + superService);
         UserEntity userEntity = new UserEntity();
