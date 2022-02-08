@@ -1,4 +1,8 @@
 package com.example.demo.services;
 
-public class SuperService {
+import com.example.demo.conf.SuperServiceInt;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SuperService implements SuperServiceInt {
 }

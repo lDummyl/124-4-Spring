@@ -13,7 +13,7 @@ public class AnnotatedBean {
 
     private final MyClient myClient;
 
-    @Scheduled(initialDelay = 1L, fixedRate = 5000L)
+    @Scheduled(initialDelay = 1000L, fixedRate = 5000L)
     public void clicker(){
         System.out.println("myClient.getHello() = " + myClient.getHello());
     }
